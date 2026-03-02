@@ -7,10 +7,10 @@ import { Navigation } from '@/components/layout/Navigation';
 import { Loader2 } from 'lucide-react';
 
 import { AssetsView } from '@/components/assets/AssetsView';
+import { LedgerView } from '@/components/ledger/LedgerView';
 
 // Lazy-loaded tab pages (will be created in later phases)
 // import { DashboardView } from '@/components/dashboard/DashboardView';
-// import { LedgerView } from '@/components/ledger/LedgerView';
 // import { StocksView } from '@/components/stocks/StocksView';
 // import { ChatView } from '@/components/chat/ChatView';
 
@@ -44,12 +44,7 @@ export default function HomePage() {
           </div>
         )}
         {activeTab === 'assets' && <AssetsView />}
-        {activeTab === 'ledger' && (
-          <div className="text-center py-20 text-slate-400">
-            <p className="text-lg font-medium mb-2">📝 수입/지출</p>
-            <p className="text-sm">Phase 3에서 구현 예정</p>
-          </div>
-        )}
+        {activeTab === 'ledger' && <LedgerView />}
         {activeTab === 'stocks' && (
           <div className="text-center py-20 text-slate-400">
             <p className="text-lg font-medium mb-2">📈 주식/코인</p>
