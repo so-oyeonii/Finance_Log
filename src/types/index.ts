@@ -178,7 +178,7 @@ export interface AiChatRequest {
   message: string;
   history: { role: 'user' | 'assistant'; content: string }[];
   context: {
-    mode: AppMode;
+    aiPersonality: string;
     totalAssets: number;
     monthlyExpense: number;
     accountSummary: string;

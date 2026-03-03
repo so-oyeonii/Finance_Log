@@ -10,6 +10,7 @@ import { AssetsView } from '@/components/assets/AssetsView';
 import { LedgerView } from '@/components/ledger/LedgerView';
 import { StocksView } from '@/components/stocks/StocksView';
 import { DashboardView } from '@/components/dashboard/DashboardView';
+import { ChatView } from '@/components/chat/ChatView';
 
 export default function HomePage() {
   const { activeTab, isDataLoaded, initialize } = useAppStore();
@@ -38,12 +39,7 @@ export default function HomePage() {
         {activeTab === 'assets' && <AssetsView />}
         {activeTab === 'ledger' && <LedgerView />}
         {activeTab === 'stocks' && <StocksView />}
-        {activeTab === 'chat' && (
-          <div className="text-center py-20 text-slate-400">
-            <p className="text-lg font-medium mb-2">🤖 AI 멘토</p>
-            <p className="text-sm">Phase 6에서 구현 예정</p>
-          </div>
-        )}
+        {activeTab === 'chat' && <ChatView />}
       </main>
     </div>
   );

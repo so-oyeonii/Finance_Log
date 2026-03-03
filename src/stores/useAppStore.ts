@@ -26,6 +26,10 @@ interface AppState {
   isEditingLayout: boolean;
   setIsEditingLayout: (editing: boolean) => void;
 
+  // OpenAI API Key (user-provided)
+  openaiApiKey: string;
+  setOpenaiApiKey: (key: string) => void;
+
   // UI states
   isDataLoaded: boolean;
   setIsDataLoaded: (loaded: boolean) => void;
@@ -43,6 +47,7 @@ export const useAppStore = create<AppState>((set) => ({
     'portfolio', 'expenseTop3', 'investComp', 'aiReport',
   ],
   isEditingLayout: false,
+  openaiApiKey: '',
   isDataLoaded: false,
 
   setMode: async (mode) => {
@@ -59,6 +64,12 @@ export const useAppStore = create<AppState>((set) => ({
   },
 
   setIsEditingLayout: (editing) => set({ isEditingLayout: editing }),
+
+  setOpenaiApiKey: async (key) => {
+    set({ openaiApiKey: key });
+    await setSetting('openaiApiKey', key);
+  },
+
   setIsDataLoaded: (loaded) => set({ isDataLoaded: loaded }),
 
   initialize: async () => {
@@ -67,6 +78,7 @@ export const useAppStore = create<AppState>((set) => ({
       'netWorth', 'dividendChart', 'incomeChart', 'expenseChart',
       'portfolio', 'expenseTop3', 'investComp', 'aiReport',
     ]);
-    set({ mode, dashboardLayout: layout, isDataLoaded: true });
+    const openaiApiKey = await getSetting<string>('openaiApiKey', '');
+    set({ mode, dashboardLayout: layout, openaiApiKey, isDataLoaded: true });
   },
 }));

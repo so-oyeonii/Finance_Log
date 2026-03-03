@@ -1,12 +1,15 @@
 'use client';
 
-import { GraduationCap, Briefcase, Save, ArrowLeftRight } from 'lucide-react';
+import { useState } from 'react';
+import { GraduationCap, Briefcase, Save, ArrowLeftRight, Settings } from 'lucide-react';
 import { useAppStore } from '@/stores/useAppStore';
 import { MODES } from '@/config/modes';
 import { exportAllData } from '@/lib/db';
+import { ApiKeyModal } from './ApiKeyModal';
 
 export function Header() {
   const { mode, setMode, selectedYear, setSelectedYear } = useAppStore();
+  const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(false);
   const modeConfig = MODES[mode];
 
   const handleModeToggle = () => {
@@ -35,6 +38,7 @@ export function Header() {
   const textColor = mode === 'graduate' ? 'text-indigo-200' : 'text-emerald-200';
 
   return (
+    <>
     <header className={`${bgColor} text-white p-4 shadow-lg sticky top-0 z-20 transition-colors duration-300`}>
       <div className="max-w-4xl mx-auto flex justify-between items-center">
         {/* Logo & Title */}
@@ -77,6 +81,16 @@ export function Header() {
             ))}
           </select>
 
+          {/* API Key Settings */}
+          <button
+            onClick={() => setIsApiKeyModalOpen(true)}
+            className={`text-xs ${accentColor} ${hoverColor} px-2 py-1.5 rounded flex items-center gap-1 border ${borderColor}`}
+            title="API Key 설정"
+          >
+            <Settings className="w-3 h-3" />
+            <span className="hidden sm:inline">설정</span>
+          </button>
+
           {/* Backup */}
           <button
             onClick={handleBackup}
@@ -88,5 +102,11 @@ export function Header() {
         </div>
       </div>
     </header>
+
+      <ApiKeyModal
+        isOpen={isApiKeyModalOpen}
+        onClose={() => setIsApiKeyModalOpen(false)}
+      />
+    </>
   );
 }

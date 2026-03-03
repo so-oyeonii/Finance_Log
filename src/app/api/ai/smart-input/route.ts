@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
 export async function POST(req: NextRequest) {
   try {
+    const apiKey = req.headers.get('x-openai-api-key') || process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+      return NextResponse.json({ error: 'API Key가 설정되지 않았습니다. 설정에서 OpenAI API Key를 입력해주세요.' }, { status: 401 });
+    }
+    const openai = new OpenAI({ apiKey });
     const { text, accounts, mode } = await req.json();
 
     const accountList = accounts.map((a: any) => `"${a.name}" (id: ${a.id})`).join(', ');

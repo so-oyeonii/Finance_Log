@@ -8,6 +8,7 @@ import { useAppStore } from '@/stores/useAppStore';
 import { LedgerSummary } from './LedgerSummary';
 import { TransactionList } from './TransactionList';
 import { TransactionFormModal } from './TransactionFormModal';
+import { SmartInputButton } from './SmartInputButton';
 import { MonthlyChart } from './MonthlyChart';
 import { ExpenseByCategory } from './ExpenseByCategory';
 import { DeleteConfirmModal } from '@/components/assets/DeleteConfirmModal';
@@ -39,6 +40,23 @@ export function LedgerView() {
 
   const handleAdd = () => {
     setEditingTransaction(null);
+    setShowForm(true);
+  };
+
+  const handleAiEditInForm = (data: Partial<Transaction>) => {
+    setEditingTransaction({
+      id: undefined,
+      date: data.date || '',
+      type: data.type || 'expense',
+      category: data.category || '',
+      amount: data.amount || 0,
+      memo: data.memo || '',
+      accountId: data.accountId || accounts[0]?.id || 0,
+      isDutchPay: data.isDutchPay || false,
+      totalAmount: data.totalAmount,
+      peopleCount: data.peopleCount,
+      createdAt: '',
+    } as Transaction);
     setShowForm(true);
   };
 
@@ -82,16 +100,24 @@ export function LedgerView() {
       <div>
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-sm font-bold text-slate-700">거래 내역</h2>
-          <button
-            onClick={handleAdd}
-            className={cn(
-              'flex items-center gap-1 text-xs px-3 py-1.5 rounded-lg text-white transition-colors',
-              isGraduate ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-emerald-600 hover:bg-emerald-700'
-            )}
-          >
-            <Plus className="w-3.5 h-3.5" />
-            추가
-          </button>
+          <div className="flex items-center gap-2">
+            <SmartInputButton
+              accounts={accounts}
+              mode={mode}
+              onConfirm={handleSubmit}
+              onEditInForm={handleAiEditInForm}
+            />
+            <button
+              onClick={handleAdd}
+              className={cn(
+                'flex items-center gap-1 text-xs px-3 py-1.5 rounded-lg text-white transition-colors',
+                isGraduate ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-emerald-600 hover:bg-emerald-700'
+              )}
+            >
+              <Plus className="w-3.5 h-3.5" />
+              추가
+            </button>
+          </div>
         </div>
 
         <TransactionList
