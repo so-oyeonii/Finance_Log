@@ -18,10 +18,10 @@ export function PortfolioChart({ data, mode }: PortfolioChartProps) {
   const total = data.reduce((sum, d) => sum + d.value, 0);
 
   return (
-    <div className="bg-white rounded-xl shadow-sm p-4 animate-slide-up">
+    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-4 animate-slide-up">
       <div className="flex items-center gap-2 mb-4">
-        <PieChartIcon className="w-4 h-4 text-slate-500" />
-        <h3 className="text-sm font-bold text-slate-700">시장별 비중</h3>
+        <PieChartIcon className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+        <h3 className="text-sm font-bold text-slate-700 dark:text-slate-200">시장별 비중</h3>
       </div>
 
       {/* Chart */}
@@ -56,11 +56,11 @@ export function PortfolioChart({ data, mode }: PortfolioChartProps) {
                   className="w-3 h-3 rounded-sm shrink-0"
                   style={{ backgroundColor: COLORS[idx % COLORS.length] }}
                 />
-                <span className="text-slate-600">{d.name}</span>
+                <span className="text-slate-600 dark:text-slate-300">{d.name}</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-slate-400">{pct.toFixed(1)}%</span>
-                <span className="text-slate-700 font-medium">{formatKRW(d.value)}</span>
+                <span className="text-slate-400 dark:text-slate-500">{pct.toFixed(1)}%</span>
+                <span className="text-slate-700 dark:text-slate-200 font-medium">{formatKRW(d.value)}</span>
               </div>
             </div>
           );

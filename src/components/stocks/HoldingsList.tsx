@@ -29,7 +29,7 @@ export function HoldingsList({ holdings, onPriceUpdate }: HoldingsListProps) {
 
   if (holdings.length === 0) {
     return (
-      <div className="text-center py-12 text-slate-400">
+      <div className="text-center py-12 text-slate-400 dark:text-slate-500">
         <Package className="w-10 h-10 mx-auto mb-2 opacity-50" />
         <p className="text-sm">보유 종목이 없습니다</p>
         <p className="text-xs mt-1">거래를 추가해보세요</p>
@@ -47,8 +47,8 @@ export function HoldingsList({ holdings, onPriceUpdate }: HoldingsListProps) {
             onClick={() => setSortBy(opt.key)}
             className={`text-[10px] px-2 py-1 rounded-full transition-colors ${
               sortBy === opt.key
-                ? 'bg-slate-700 text-white'
-                : 'bg-slate-100 text-slate-400 hover:bg-slate-200'
+                ? 'bg-slate-700 dark:bg-slate-600 text-white'
+                : 'bg-slate-100 dark:bg-slate-700 text-slate-400 dark:text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-600'
             }`}
           >
             {opt.label}

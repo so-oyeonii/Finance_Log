@@ -11,6 +11,7 @@ import { TransactionFormModal } from './TransactionFormModal';
 import { SmartInputButton } from './SmartInputButton';
 import { MonthlyChart } from './MonthlyChart';
 import { ExpenseByCategory } from './ExpenseByCategory';
+import { RecurringList } from './RecurringList';
 import { DeleteConfirmModal } from '@/components/assets/DeleteConfirmModal';
 import type { Transaction } from '@/types';
 import { cn } from '@/lib/utils';
@@ -96,10 +97,13 @@ export function LedgerView() {
       <ExpenseByCategory data={expenseByCategory} mode={mode} />
       <MonthlyChart monthlyStats={monthlyStats} mode={mode} />
 
+      {/* Recurring Transactions */}
+      <RecurringList accounts={accounts} mode={mode} />
+
       {/* Transaction List Header + Add Button */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-bold text-slate-700">거래 내역</h2>
+          <h2 className="text-sm font-bold text-slate-700 dark:text-slate-200">거래 내역</h2>
           <div className="flex items-center gap-2">
             <SmartInputButton
               accounts={accounts}

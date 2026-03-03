@@ -72,7 +72,7 @@ export function AssetsView() {
       {/* Accounts Section */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-bold text-slate-700">계좌 관리</h2>
+          <h2 className="text-sm font-bold text-slate-700 dark:text-slate-200">계좌 관리</h2>
           <button
             onClick={handleAddAccount}
             className={cn(
@@ -98,10 +98,10 @@ export function AssetsView() {
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-xl shadow-sm p-8 text-center animate-fade-in">
-            <Wallet className="w-10 h-10 text-slate-300 mx-auto mb-2" />
-            <p className="text-sm text-slate-400">등록된 계좌가 없습니다</p>
-            <p className="text-xs text-slate-300 mt-1">위의 추가 버튼을 눌러 계좌를 등록해보세요</p>
+          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-8 text-center animate-fade-in">
+            <Wallet className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto mb-2" />
+            <p className="text-sm text-slate-400 dark:text-slate-500">등록된 계좌가 없습니다</p>
+            <p className="text-xs text-slate-300 dark:text-slate-600 mt-1">위의 추가 버튼을 눌러 계좌를 등록해보세요</p>
           </div>
         )}
       </div>

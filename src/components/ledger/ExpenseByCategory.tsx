@@ -20,10 +20,10 @@ export function ExpenseByCategory({ data, mode }: ExpenseByCategoryProps) {
   const total = data.reduce((sum, d) => sum + d.value, 0);
 
   return (
-    <div className="bg-white rounded-xl shadow-sm p-4 animate-slide-up">
+    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-4 animate-slide-up">
       <div className="flex items-center gap-2 mb-4">
-        <PieChart className="w-4 h-4 text-slate-500" />
-        <h3 className="text-sm font-bold text-slate-700">카테고리별 지출</h3>
+        <PieChart className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+        <h3 className="text-sm font-bold text-slate-700 dark:text-slate-200">카테고리별 지출</h3>
       </div>
 
       {/* Horizontal Bar */}
@@ -45,11 +45,11 @@ export function ExpenseByCategory({ data, mode }: ExpenseByCategoryProps) {
             <div key={d.name} className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className={`w-2.5 h-2.5 rounded-full ${COLORS[i % COLORS.length]}`} />
-                <span className="text-sm text-slate-600">{d.name}</span>
+                <span className="text-sm text-slate-600 dark:text-slate-300">{d.name}</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-400">{percent}%</span>
-                <span className="text-sm font-medium text-slate-700">{formatKRW(d.value)}</span>
+                <span className="text-xs text-slate-400 dark:text-slate-500">{percent}%</span>
+                <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{formatKRW(d.value)}</span>
               </div>
             </div>
           );

@@ -67,7 +67,7 @@ export function StocksView() {
       <PortfolioSummary portfolio={portfolio} mode={mode} />
 
       {/* Sub Tab Toggle */}
-      <div className="flex gap-1 bg-slate-100 rounded-lg p-1">
+      <div className="flex gap-1 bg-slate-100 dark:bg-slate-700 rounded-lg p-1">
         {tabs.map((tab) => (
           <button
             key={tab.key}
@@ -75,8 +75,8 @@ export function StocksView() {
             className={cn(
               'flex-1 py-2 rounded-md text-xs font-medium transition-colors',
               subTab === tab.key
-                ? `bg-white shadow-sm ${isGraduate ? 'text-indigo-600' : 'text-emerald-600'}`
-                : 'text-slate-400 hover:text-slate-600'
+                ? `bg-white dark:bg-slate-800 shadow-sm ${isGraduate ? 'text-indigo-600' : 'text-emerald-600'}`
+                : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300'
             )}
           >
             {tab.label}
@@ -90,7 +90,7 @@ export function StocksView() {
           <PortfolioChart data={portfolioByMarket} mode={mode} />
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-bold text-slate-700">보유 종목</h2>
+              <h2 className="text-sm font-bold text-slate-700 dark:text-slate-200">보유 종목</h2>
               <button
                 onClick={() => setShowForm(true)}
                 className={cn(
@@ -114,7 +114,7 @@ export function StocksView() {
       {subTab === 'transactions' && (
         <div>
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-bold text-slate-700">거래 내역</h2>
+            <h2 className="text-sm font-bold text-slate-700 dark:text-slate-200">거래 내역</h2>
             <button
               onClick={() => setShowForm(true)}
               className={cn(

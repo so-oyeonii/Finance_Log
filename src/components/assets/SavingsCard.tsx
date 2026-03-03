@@ -16,61 +16,61 @@ export function SavingsCard({ saving, onDelete }: SavingsCardProps) {
   const isDeposit = saving.type === '예금';
 
   return (
-    <div className="bg-white rounded-xl shadow-sm p-4 animate-slide-up">
+    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-4 animate-slide-up">
       {/* Header */}
       <div className="flex items-start justify-between mb-3">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className={cn(
               'text-xs px-2 py-0.5 rounded-full font-medium',
-              isDeposit ? 'bg-blue-100 text-blue-600' : 'bg-purple-100 text-purple-600'
+              isDeposit ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' : 'bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400'
             )}>
               {saving.type}
             </span>
-            <span className="text-xs text-slate-400">{saving.rate}% · {saving.term}개월</span>
+            <span className="text-xs text-slate-400 dark:text-slate-500">{saving.rate}% · {saving.term}개월</span>
           </div>
-          <p className="text-sm font-medium text-slate-700">{saving.name}</p>
+          <p className="text-sm font-medium text-slate-700 dark:text-slate-200">{saving.name}</p>
         </div>
         <button
           onClick={() => onDelete(saving)}
-          className="p-1.5 hover:bg-red-50 rounded-lg transition-colors"
+          className="p-1.5 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
           title="삭제"
         >
-          <Trash2 className="w-4 h-4 text-slate-400 hover:text-red-500" />
+          <Trash2 className="w-4 h-4 text-slate-400 dark:text-slate-500 hover:text-red-500" />
         </button>
       </div>
 
       {/* Info Grid */}
       <div className="grid grid-cols-2 gap-2 text-xs">
-        <div className="bg-slate-50 rounded-lg p-2">
-          <p className="text-slate-400 mb-0.5">{isDeposit ? '거치금' : '월 납입액'}</p>
-          <p className="font-medium text-slate-700">{formatKRW(saving.amount)}</p>
+        <div className="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-2">
+          <p className="text-slate-400 dark:text-slate-500 mb-0.5">{isDeposit ? '거치금' : '월 납입액'}</p>
+          <p className="font-medium text-slate-700 dark:text-slate-200">{formatKRW(saving.amount)}</p>
         </div>
-        <div className="bg-slate-50 rounded-lg p-2">
-          <p className="text-slate-400 mb-0.5">원금 합계</p>
-          <p className="font-medium text-slate-700">{formatKRW(info.principal)}</p>
+        <div className="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-2">
+          <p className="text-slate-400 dark:text-slate-500 mb-0.5">원금 합계</p>
+          <p className="font-medium text-slate-700 dark:text-slate-200">{formatKRW(info.principal)}</p>
         </div>
-        <div className="bg-slate-50 rounded-lg p-2">
-          <p className="text-slate-400 mb-0.5">세전이자</p>
+        <div className="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-2">
+          <p className="text-slate-400 dark:text-slate-500 mb-0.5">세전이자</p>
           <p className="font-medium text-emerald-600">{formatKRW(Math.round(info.preTaxInterest))}</p>
         </div>
-        <div className="bg-slate-50 rounded-lg p-2">
-          <p className="text-slate-400 mb-0.5">세금 (15.4%)</p>
+        <div className="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-2">
+          <p className="text-slate-400 dark:text-slate-500 mb-0.5">세금 (15.4%)</p>
           <p className="font-medium text-red-500">-{formatKRW(Math.round(info.tax))}</p>
         </div>
       </div>
 
       {/* Maturity Amount */}
-      <div className="mt-3 bg-indigo-50 rounded-lg p-3 text-center">
-        <p className="text-xs text-indigo-400 mb-0.5">만기 수령액</p>
-        <p className="text-lg font-bold text-indigo-700">{formatKRW(Math.round(info.maturityAmount))}</p>
-        <p className="text-xs text-indigo-400 mt-0.5">
+      <div className="mt-3 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg p-3 text-center">
+        <p className="text-xs text-indigo-400 dark:text-indigo-300 mb-0.5">만기 수령액</p>
+        <p className="text-lg font-bold text-indigo-700 dark:text-indigo-300">{formatKRW(Math.round(info.maturityAmount))}</p>
+        <p className="text-xs text-indigo-400 dark:text-indigo-300 mt-0.5">
           세후이자 {formatKRW(Math.round(info.afterTaxInterest))}
         </p>
       </div>
 
       {/* Start Date */}
-      <p className="text-xs text-slate-400 mt-2 text-right">
+      <p className="text-xs text-slate-400 dark:text-slate-500 mt-2 text-right">
         가입일 {formatDate(saving.startDate)}
       </p>
     </div>

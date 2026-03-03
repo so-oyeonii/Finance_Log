@@ -115,7 +115,7 @@ export function TransactionFormModal({
     ? 'bg-indigo-600 hover:bg-indigo-700'
     : 'bg-emerald-600 hover:bg-emerald-700';
 
-  const inputClass = 'w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 transition-colors';
+  const inputClass = 'w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 transition-colors';
 
   const typeOptions = [
     { key: 'expense' as const, label: '지출' },
@@ -125,21 +125,21 @@ export function TransactionFormModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-end md:items-center justify-center animate-fade-in">
-      <div className="bg-white w-full md:w-[28rem] rounded-t-2xl md:rounded-2xl p-6 max-h-[85vh] overflow-y-auto animate-slide-up">
+      <div className="bg-white dark:bg-slate-800 w-full md:w-[28rem] rounded-t-2xl md:rounded-2xl p-6 max-h-[85vh] overflow-y-auto animate-slide-up">
         {/* Header */}
         <div className="flex items-center justify-between mb-5">
-          <h3 className="font-bold text-lg text-slate-800">
+          <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100">
             {isEditing ? '거래 수정' : '거래 추가'}
           </h3>
-          <button onClick={onClose} className="p-1 hover:bg-slate-100 rounded-full">
-            <X className="w-5 h-5 text-slate-400" />
+          <button onClick={onClose} className="p-1 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full">
+            <X className="w-5 h-5 text-slate-400 dark:text-slate-500" />
           </button>
         </div>
 
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
           {/* Type Toggle */}
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">유형</label>
+            <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">유형</label>
             <div className="flex gap-2">
               {typeOptions.map((t) => (
                 <button
@@ -154,7 +154,7 @@ export function TransactionFormModal({
                         : t.key === 'expense'
                           ? 'bg-red-500 text-white'
                           : 'bg-amber-500 text-white')
-                      : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+                      : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600'
                   )}
                 >
                   {t.label}
@@ -165,7 +165,7 @@ export function TransactionFormModal({
 
           {/* Date */}
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">날짜</label>
+            <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">날짜</label>
             <input
               type="date"
               {...register('date')}
@@ -176,7 +176,7 @@ export function TransactionFormModal({
           {/* Category */}
           {watchedType !== 'transfer' && (
             <div>
-              <label className="block text-xs font-medium text-slate-600 mb-1">카테고리</label>
+              <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">카테고리</label>
               <select
                 {...register('category')}
                 className={cn(inputClass, 'cursor-pointer', errors.category && 'border-red-300')}
@@ -192,7 +192,7 @@ export function TransactionFormModal({
 
           {/* Amount */}
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">금액 (원)</label>
+            <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">금액 (원)</label>
             <input
               type="number"
               {...register('amount', { valueAsNumber: true })}
@@ -204,7 +204,7 @@ export function TransactionFormModal({
 
           {/* Account */}
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">
+            <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">
               {watchedType === 'transfer' ? '출금 계좌' : '계좌'}
             </label>
             <select
@@ -222,7 +222,7 @@ export function TransactionFormModal({
           {/* To Account (transfer only) */}
           {watchedType === 'transfer' && (
             <div>
-              <label className="block text-xs font-medium text-slate-600 mb-1">입금 계좌</label>
+              <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">입금 계좌</label>
               <select
                 {...register('toAccountId', { valueAsNumber: true })}
                 className={cn(inputClass, 'cursor-pointer')}
@@ -237,7 +237,7 @@ export function TransactionFormModal({
 
           {/* Memo */}
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">메모</label>
+            <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">메모</label>
             <input
               {...register('memo')}
               placeholder="예: 점심 김치찌개"
@@ -254,7 +254,7 @@ export function TransactionFormModal({
                 {...register('isDutchPay')}
                 className="rounded border-slate-300"
               />
-              <label htmlFor="isDutchPay" className="text-xs text-slate-600 cursor-pointer">
+              <label htmlFor="isDutchPay" className="text-xs text-slate-600 dark:text-slate-300 cursor-pointer">
                 더치페이 (N빵)
               </label>
             </div>
@@ -262,9 +262,9 @@ export function TransactionFormModal({
 
           {/* Dutch Pay Fields */}
           {watchedIsDutchPay && watchedType === 'expense' && (
-            <div className="grid grid-cols-2 gap-3 bg-slate-50 rounded-lg p-3">
+            <div className="grid grid-cols-2 gap-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg p-3">
               <div>
-                <label className="block text-xs font-medium text-slate-600 mb-1">총 금액</label>
+                <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">총 금액</label>
                 <input
                   type="number"
                   {...register('totalAmount', { valueAsNumber: true })}
@@ -273,7 +273,7 @@ export function TransactionFormModal({
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-slate-600 mb-1">인원</label>
+                <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">인원</label>
                 <input
                   type="number"
                   {...register('peopleCount', { valueAsNumber: true })}

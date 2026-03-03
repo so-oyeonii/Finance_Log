@@ -25,21 +25,21 @@ export function DividendChartWidget({ dividendStats }: DividendChartWidgetProps)
   const hasData = totalYearlyDiv > 0;
 
   return (
-    <div className="bg-white rounded-xl shadow-sm p-4 animate-fade-in">
+    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-4 animate-fade-in">
       <div className="flex items-center gap-2 mb-3">
         <Coins className="w-4 h-4 text-amber-500" />
-        <h3 className="text-sm font-bold text-slate-700">배당금</h3>
+        <h3 className="text-sm font-bold text-slate-700 dark:text-slate-200">배당금</h3>
       </div>
 
       {/* Summary */}
       <div className="grid grid-cols-2 gap-2 mb-3">
-        <div className="bg-amber-50 rounded-lg p-2 text-center">
-          <p className="text-[10px] text-amber-600/70">연간 배당</p>
-          <p className="text-xs font-bold text-amber-700">{formatKRW(totalYearlyDiv)}</p>
+        <div className="bg-amber-50 dark:bg-amber-900/30 rounded-lg p-2 text-center">
+          <p className="text-[10px] text-amber-600/70 dark:text-amber-400/70">연간 배당</p>
+          <p className="text-xs font-bold text-amber-700 dark:text-amber-300">{formatKRW(totalYearlyDiv)}</p>
         </div>
-        <div className="bg-amber-50 rounded-lg p-2 text-center">
-          <p className="text-[10px] text-amber-600/70">월 평균</p>
-          <p className="text-xs font-bold text-amber-700">{formatKRW(avgMonthlyDiv)}</p>
+        <div className="bg-amber-50 dark:bg-amber-900/30 rounded-lg p-2 text-center">
+          <p className="text-[10px] text-amber-600/70 dark:text-amber-400/70">월 평균</p>
+          <p className="text-xs font-bold text-amber-700 dark:text-amber-300">{formatKRW(avgMonthlyDiv)}</p>
         </div>
       </div>
 
@@ -58,7 +58,7 @@ export function DividendChartWidget({ dividendStats }: DividendChartWidgetProps)
           </ResponsiveContainer>
         </div>
       ) : (
-        <p className="text-xs text-slate-400 text-center py-4">배당 내역이 없습니다</p>
+        <p className="text-xs text-slate-400 dark:text-slate-500 text-center py-4">배당 내역이 없습니다</p>
       )}
     </div>
   );

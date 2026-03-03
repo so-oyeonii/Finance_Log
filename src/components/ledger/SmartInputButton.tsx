@@ -137,12 +137,12 @@ export function SmartInputButton({ accounts, mode, onConfirm, onEditInForm }: Sm
 
       {isOpen && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-end md:items-center justify-center animate-fade-in">
-          <div className="bg-white w-full md:w-[28rem] rounded-t-2xl md:rounded-2xl p-6 max-h-[85vh] overflow-y-auto animate-slide-up">
+          <div className="bg-white dark:bg-slate-800 w-full md:w-[28rem] rounded-t-2xl md:rounded-2xl p-6 max-h-[85vh] overflow-y-auto animate-slide-up">
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-lg text-slate-800">AI 거래 입력</h3>
-              <button onClick={handleClose} className="p-1 hover:bg-slate-100 rounded-full">
-                <X className="w-5 h-5 text-slate-400" />
+              <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100">AI 거래 입력</h3>
+              <button onClick={handleClose} className="p-1 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full">
+                <X className="w-5 h-5 text-slate-400 dark:text-slate-500" />
               </button>
             </div>
 
@@ -155,8 +155,8 @@ export function SmartInputButton({ accounts, mode, onConfirm, onEditInForm }: Sm
                     className={cn(
                       'flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm font-medium transition-colors',
                       inputMode === 'text'
-                        ? (isGraduate ? 'bg-indigo-100 text-indigo-700' : 'bg-emerald-100 text-emerald-700')
-                        : 'bg-slate-100 text-slate-500'
+                        ? (isGraduate ? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300' : 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300')
+                        : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
                     )}
                   >
                     <MessageSquare className="w-4 h-4" />
@@ -167,8 +167,8 @@ export function SmartInputButton({ accounts, mode, onConfirm, onEditInForm }: Sm
                     className={cn(
                       'flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm font-medium transition-colors',
                       inputMode === 'receipt'
-                        ? (isGraduate ? 'bg-indigo-100 text-indigo-700' : 'bg-emerald-100 text-emerald-700')
-                        : 'bg-slate-100 text-slate-500'
+                        ? (isGraduate ? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300' : 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300')
+                        : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
                     )}
                   >
                     <Camera className="w-4 h-4" />
@@ -183,7 +183,7 @@ export function SmartInputButton({ accounts, mode, onConfirm, onEditInForm }: Sm
                       onChange={(e) => setText(e.target.value)}
                       placeholder="예: 어제 스타벅스에서 아메리카노 4500원 카드로 결제"
                       rows={3}
-                      className="w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 resize-none"
+                      className="w-full px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 resize-none"
                       disabled={isLoading}
                     />
                     <button
@@ -208,18 +208,18 @@ export function SmartInputButton({ accounts, mode, onConfirm, onEditInForm }: Sm
                   <div className="space-y-3">
                     <div
                       onClick={() => fileRef.current?.click()}
-                      className="border-2 border-dashed border-slate-200 rounded-lg p-8 text-center cursor-pointer hover:border-slate-300 transition-colors"
+                      className="border-2 border-dashed border-slate-200 dark:border-slate-600 rounded-lg p-8 text-center cursor-pointer hover:border-slate-300 dark:hover:border-slate-500 transition-colors"
                     >
                       {isLoading ? (
                         <div className="flex flex-col items-center gap-2">
-                          <Loader2 className="w-8 h-8 text-slate-400 animate-spin" />
-                          <p className="text-sm text-slate-500">영수증 분석 중...</p>
+                          <Loader2 className="w-8 h-8 text-slate-400 dark:text-slate-500 animate-spin" />
+                          <p className="text-sm text-slate-500 dark:text-slate-400">영수증 분석 중...</p>
                         </div>
                       ) : (
                         <div className="flex flex-col items-center gap-2">
-                          <Camera className="w-8 h-8 text-slate-400" />
-                          <p className="text-sm text-slate-500">영수증 사진을 선택하세요</p>
-                          <p className="text-xs text-slate-400">JPG, PNG 지원</p>
+                          <Camera className="w-8 h-8 text-slate-400 dark:text-slate-500" />
+                          <p className="text-sm text-slate-500 dark:text-slate-400">영수증 사진을 선택하세요</p>
+                          <p className="text-xs text-slate-400 dark:text-slate-500">JPG, PNG 지원</p>
                         </div>
                       )}
                     </div>
@@ -240,13 +240,13 @@ export function SmartInputButton({ accounts, mode, onConfirm, onEditInForm }: Sm
             ) : (
               /* Result preview */
               <div className="space-y-4">
-                <div className="bg-slate-50 rounded-lg p-4 space-y-2">
+                <div className="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4 space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-slate-500">날짜</span>
-                    <span className="font-medium text-slate-700">{result.date}</span>
+                    <span className="text-slate-500 dark:text-slate-400">날짜</span>
+                    <span className="font-medium text-slate-700 dark:text-slate-200">{result.date}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-slate-500">유형</span>
+                    <span className="text-slate-500 dark:text-slate-400">유형</span>
                     <span className={cn(
                       'font-medium',
                       result.type === 'income' ? 'text-blue-600' : result.type === 'expense' ? 'text-red-500' : 'text-amber-600'
@@ -255,23 +255,23 @@ export function SmartInputButton({ accounts, mode, onConfirm, onEditInForm }: Sm
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-slate-500">카테고리</span>
-                    <span className="font-medium text-slate-700">{result.category}</span>
+                    <span className="text-slate-500 dark:text-slate-400">카테고리</span>
+                    <span className="font-medium text-slate-700 dark:text-slate-200">{result.category}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-slate-500">금액</span>
-                    <span className="font-bold text-slate-800">{formatKRW(result.amount)}</span>
+                    <span className="text-slate-500 dark:text-slate-400">금액</span>
+                    <span className="font-bold text-slate-800 dark:text-slate-100">{formatKRW(result.amount)}</span>
                   </div>
                   {result.memo && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-slate-500">메모</span>
-                      <span className="text-slate-700">{result.memo}</span>
+                      <span className="text-slate-500 dark:text-slate-400">메모</span>
+                      <span className="text-slate-700 dark:text-slate-200">{result.memo}</span>
                     </div>
                   )}
                   {result.isDutchPay && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-slate-500">더치페이</span>
-                      <span className="text-slate-700">
+                      <span className="text-slate-500 dark:text-slate-400">더치페이</span>
+                      <span className="text-slate-700 dark:text-slate-200">
                         {result.totalAmount?.toLocaleString()}원 / {result.peopleCount}명
                       </span>
                     </div>
@@ -281,7 +281,7 @@ export function SmartInputButton({ accounts, mode, onConfirm, onEditInForm }: Sm
                 <div className="flex gap-2">
                   <button
                     onClick={handleEdit}
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg border border-slate-200 text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors"
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
                   >
                     <Edit3 className="w-4 h-4" />
                     수정
@@ -300,7 +300,7 @@ export function SmartInputButton({ accounts, mode, onConfirm, onEditInForm }: Sm
 
                 <button
                   onClick={reset}
-                  className="w-full text-center text-xs text-slate-400 hover:text-slate-600 transition-colors"
+                  className="w-full text-center text-xs text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
                 >
                   다시 입력하기
                 </button>

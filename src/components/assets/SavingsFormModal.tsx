@@ -70,23 +70,23 @@ export function SavingsFormModal({ mode, onSubmit, onClose }: SavingsFormModalPr
     ? 'bg-indigo-600 hover:bg-indigo-700'
     : 'bg-emerald-600 hover:bg-emerald-700';
 
-  const inputClass = 'w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 transition-colors';
+  const inputClass = 'w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 transition-colors';
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-end md:items-center justify-center animate-fade-in">
-      <div className="bg-white w-full md:w-[28rem] rounded-t-2xl md:rounded-2xl p-6 max-h-[85vh] overflow-y-auto animate-slide-up">
+      <div className="bg-white dark:bg-slate-800 w-full md:w-[28rem] rounded-t-2xl md:rounded-2xl p-6 max-h-[85vh] overflow-y-auto animate-slide-up">
         {/* Header */}
         <div className="flex items-center justify-between mb-5">
-          <h3 className="font-bold text-lg text-slate-800">예적금 추가</h3>
-          <button onClick={onClose} className="p-1 hover:bg-slate-100 rounded-full">
-            <X className="w-5 h-5 text-slate-400" />
+          <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100">예적금 추가</h3>
+          <button onClick={onClose} className="p-1 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full">
+            <X className="w-5 h-5 text-slate-400 dark:text-slate-500" />
           </button>
         </div>
 
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
           {/* Type Toggle */}
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">유형</label>
+            <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">유형</label>
             <div className="flex gap-2">
               {(['예금', '적금'] as const).map((t) => (
                 <button
@@ -97,7 +97,7 @@ export function SavingsFormModal({ mode, onSubmit, onClose }: SavingsFormModalPr
                     'flex-1 py-2 rounded-lg text-sm font-medium transition-colors',
                     watchedType === t
                       ? (isGraduate ? 'bg-indigo-600 text-white' : 'bg-emerald-600 text-white')
-                      : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+                      : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600'
                   )}
                 >
                   {t}
@@ -108,7 +108,7 @@ export function SavingsFormModal({ mode, onSubmit, onClose }: SavingsFormModalPr
 
           {/* Name */}
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">상품명</label>
+            <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">상품명</label>
             <input
               {...register('name')}
               placeholder="예: 카카오뱅크 정기예금"
@@ -119,7 +119,7 @@ export function SavingsFormModal({ mode, onSubmit, onClose }: SavingsFormModalPr
 
           {/* Amount */}
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">
+            <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">
               {watchedType === '예금' ? '거치금액 (원)' : '월 납입액 (원)'}
             </label>
             <input
@@ -134,7 +134,7 @@ export function SavingsFormModal({ mode, onSubmit, onClose }: SavingsFormModalPr
           {/* Rate & Term */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-slate-600 mb-1">연이율 (%)</label>
+              <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">연이율 (%)</label>
               <input
                 type="number"
                 step="0.01"
@@ -145,7 +145,7 @@ export function SavingsFormModal({ mode, onSubmit, onClose }: SavingsFormModalPr
               {errors.rate && <p className="text-xs text-red-500 mt-1">{errors.rate.message}</p>}
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-600 mb-1">기간 (개월)</label>
+              <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">기간 (개월)</label>
               <input
                 type="number"
                 {...register('term', { valueAsNumber: true })}
@@ -158,7 +158,7 @@ export function SavingsFormModal({ mode, onSubmit, onClose }: SavingsFormModalPr
 
           {/* Start Date */}
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">가입일</label>
+            <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">가입일</label>
             <input
               type="date"
               {...register('startDate')}
@@ -169,10 +169,10 @@ export function SavingsFormModal({ mode, onSubmit, onClose }: SavingsFormModalPr
 
           {/* Maturity Preview */}
           {preview && (
-            <div className="bg-indigo-50 rounded-lg p-3 text-center">
-              <p className="text-xs text-indigo-400 mb-0.5">예상 만기 수령액</p>
-              <p className="text-lg font-bold text-indigo-700">{formatKRW(Math.round(preview.maturityAmount))}</p>
-              <p className="text-xs text-indigo-400 mt-0.5">
+            <div className="bg-indigo-50 dark:bg-indigo-900/30 rounded-lg p-3 text-center">
+              <p className="text-xs text-indigo-400 dark:text-indigo-300 mb-0.5">예상 만기 수령액</p>
+              <p className="text-lg font-bold text-indigo-700 dark:text-indigo-300">{formatKRW(Math.round(preview.maturityAmount))}</p>
+              <p className="text-xs text-indigo-400 dark:text-indigo-300 mt-0.5">
                 원금 {formatKRW(preview.principal)} + 세후이자 {formatKRW(Math.round(preview.afterTaxInterest))}
               </p>
             </div>

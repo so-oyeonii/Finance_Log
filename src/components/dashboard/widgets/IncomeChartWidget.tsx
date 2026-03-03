@@ -20,21 +20,21 @@ export function IncomeChartWidget({ monthlyStats }: IncomeChartWidgetProps) {
 
   if (!hasData) {
     return (
-      <div className="bg-white rounded-xl shadow-sm p-4 animate-fade-in">
+      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-4 animate-fade-in">
         <div className="flex items-center gap-2 mb-3">
           <TrendingUp className="w-4 h-4 text-blue-500" />
-          <h3 className="text-sm font-bold text-slate-700">월별 수입</h3>
+          <h3 className="text-sm font-bold text-slate-700 dark:text-slate-200">월별 수입</h3>
         </div>
-        <p className="text-xs text-slate-400 text-center py-6">수입 내역이 없습니다</p>
+        <p className="text-xs text-slate-400 dark:text-slate-500 text-center py-6">수입 내역이 없습니다</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm p-4 animate-fade-in">
+    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-4 animate-fade-in">
       <div className="flex items-center gap-2 mb-3">
         <TrendingUp className="w-4 h-4 text-blue-500" />
-        <h3 className="text-sm font-bold text-slate-700">월별 수입</h3>
+        <h3 className="text-sm font-bold text-slate-700 dark:text-slate-200">월별 수입</h3>
       </div>
 
       <div className="h-44">

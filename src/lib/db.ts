@@ -78,6 +78,41 @@ export async function exportAllData() {
   };
 }
 
+// ============================================
+// Helper: Validate Backup Data
+// ============================================
+
+const TABLE_NAMES = ['accounts', 'transactions', 'stocks', 'stockPrices', 'savings', 'recurring', 'settings'] as const;
+
+export function validateBackupData(json: unknown): {
+  valid: boolean;
+  error?: string;
+  counts?: Record<string, number>;
+} {
+  if (!json || typeof json !== 'object') {
+    return { valid: false, error: '유효한 JSON 객체가 아닙니다.' };
+  }
+
+  const obj = json as Record<string, unknown>;
+
+  if (!obj.data || typeof obj.data !== 'object') {
+    return { valid: false, error: 'data 필드가 없습니다.' };
+  }
+
+  const data = obj.data as Record<string, unknown>;
+  const counts: Record<string, number> = {};
+
+  for (const table of TABLE_NAMES) {
+    const arr = data[table];
+    if (arr !== undefined && !Array.isArray(arr)) {
+      return { valid: false, error: `${table} 필드가 배열이 아닙니다.` };
+    }
+    counts[table] = Array.isArray(arr) ? arr.length : 0;
+  }
+
+  return { valid: true, counts };
+}
+
 export async function importAllData(backup: Awaited<ReturnType<typeof exportAllData>>) {
   await db.transaction('rw',
     [db.accounts, db.transactions, db.stocks,

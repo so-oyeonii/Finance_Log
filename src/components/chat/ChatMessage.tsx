@@ -61,13 +61,13 @@ export function ChatMessage({ role, content, isGraduate }: ChatMessageProps) {
         <Bot className={cn('w-4 h-4', isGraduate ? 'text-indigo-600' : 'text-emerald-600')} />
       </div>
       <div className="max-w-[80%]">
-        <div className="bg-white rounded-2xl rounded-bl-md px-4 py-2.5 text-sm text-slate-700 shadow-sm whitespace-pre-wrap">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl rounded-bl-md px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 shadow-sm whitespace-pre-wrap">
           {content}
         </div>
         <button
           onClick={handleTts}
           disabled={isSpeaking}
-          className="mt-1 ml-1 text-slate-400 hover:text-slate-600 transition-colors disabled:opacity-50"
+          className="mt-1 ml-1 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors disabled:opacity-50"
           title="음성으로 듣기"
         >
           {isSpeaking ? (

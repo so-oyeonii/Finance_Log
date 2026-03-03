@@ -9,9 +9,9 @@ import { cn } from '@/lib/utils';
 type FilterType = 'all' | StockTradeType;
 
 const TYPE_BADGES: Record<StockTradeType, { label: string; color: string }> = {
-  buy: { label: '매수', color: 'bg-blue-100 text-blue-700' },
-  sell: { label: '매도', color: 'bg-red-100 text-red-700' },
-  dividend: { label: '배당', color: 'bg-amber-100 text-amber-700' },
+  buy: { label: '매수', color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' },
+  sell: { label: '매도', color: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' },
+  dividend: { label: '배당', color: 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300' },
 };
 
 interface StockTransactionListProps {
@@ -53,7 +53,7 @@ export function StockTransactionList({ stocks, accounts, onDelete }: StockTransa
 
   if (stocks.length === 0) {
     return (
-      <div className="text-center py-12 text-slate-400">
+      <div className="text-center py-12 text-slate-400 dark:text-slate-500">
         <Package className="w-10 h-10 mx-auto mb-2 opacity-50" />
         <p className="text-sm">거래 내역이 없습니다</p>
       </div>
@@ -71,8 +71,8 @@ export function StockTransactionList({ stocks, accounts, onDelete }: StockTransa
             className={cn(
               'text-[10px] px-2.5 py-1 rounded-full transition-colors',
               filter === opt.key
-                ? 'bg-slate-700 text-white'
-                : 'bg-slate-100 text-slate-400 hover:bg-slate-200'
+                ? 'bg-slate-700 dark:bg-slate-600 text-white'
+                : 'bg-slate-100 dark:bg-slate-700 text-slate-400 dark:text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-600'
             )}
           >
             {opt.label}
@@ -84,26 +84,26 @@ export function StockTransactionList({ stocks, accounts, onDelete }: StockTransa
       <div className="space-y-4">
         {grouped.map(([date, items]) => (
           <div key={date}>
-            <p className="text-[10px] text-slate-400 font-medium mb-2">{formatDate(date)}</p>
+            <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium mb-2">{formatDate(date)}</p>
             <div className="space-y-2">
               {items.map((s) => {
                 const badge = TYPE_BADGES[s.type];
                 const amount = s.type === 'dividend' ? s.price : s.price * s.quantity;
 
                 return (
-                  <div key={s.id} className="bg-white rounded-xl shadow-sm p-3 flex items-center justify-between">
+                  <div key={s.id} className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-3 flex items-center justify-between">
                     <div className="flex items-center gap-3 min-w-0">
                       <span className={cn('text-[10px] font-medium px-2 py-0.5 rounded-full shrink-0', badge.color)}>
                         {badge.label}
                       </span>
                       <div className="min-w-0">
-                        <p className="text-sm font-medium text-slate-800 truncate">
+                        <p className="text-sm font-medium text-slate-800 dark:text-slate-100 truncate">
                           {s.ticker}
                           {s.type !== 'dividend' && (
-                            <span className="text-slate-400 font-normal ml-1">x{formatNumber(s.quantity)}</span>
+                            <span className="text-slate-400 dark:text-slate-500 font-normal ml-1">x{formatNumber(s.quantity)}</span>
                           )}
                         </p>
-                        <p className="text-[10px] text-slate-400 truncate">
+                        <p className="text-[10px] text-slate-400 dark:text-slate-500 truncate">
                           {getAccountName(s.accountId)}
                           {s.memo && ` · ${s.memo}`}
                         </p>
@@ -118,9 +118,9 @@ export function StockTransactionList({ stocks, accounts, onDelete }: StockTransa
                       </span>
                       <button
                         onClick={() => onDelete(s)}
-                        className="p-1 hover:bg-red-50 rounded-lg transition-colors"
+                        className="p-1 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                       >
-                        <Trash2 className="w-3.5 h-3.5 text-slate-300 hover:text-red-400" />
+                        <Trash2 className="w-3.5 h-3.5 text-slate-300 dark:text-slate-600 hover:text-red-400" />
                       </button>
                     </div>
                   </div>

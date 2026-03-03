@@ -15,21 +15,21 @@ export function PortfolioWidget({ data }: PortfolioWidgetProps) {
 
   if (data.length === 0) {
     return (
-      <div className="bg-white rounded-xl shadow-sm p-4 animate-fade-in">
+      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-4 animate-fade-in">
         <div className="flex items-center gap-2 mb-3">
           <PieChartIcon className="w-4 h-4 text-indigo-500" />
-          <h3 className="text-sm font-bold text-slate-700">시장별 비중</h3>
+          <h3 className="text-sm font-bold text-slate-700 dark:text-slate-200">시장별 비중</h3>
         </div>
-        <p className="text-xs text-slate-400 text-center py-4">보유 종목이 없습니다</p>
+        <p className="text-xs text-slate-400 dark:text-slate-500 text-center py-4">보유 종목이 없습니다</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm p-4 animate-fade-in">
+    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-4 animate-fade-in">
       <div className="flex items-center gap-2 mb-3">
         <PieChartIcon className="w-4 h-4 text-indigo-500" />
-        <h3 className="text-sm font-bold text-slate-700">시장별 비중</h3>
+        <h3 className="text-sm font-bold text-slate-700 dark:text-slate-200">시장별 비중</h3>
       </div>
 
       <div className="flex items-center gap-4">
@@ -65,9 +65,9 @@ export function PortfolioWidget({ data }: PortfolioWidgetProps) {
                     className="w-2.5 h-2.5 rounded-sm shrink-0"
                     style={{ backgroundColor: COLORS[idx % COLORS.length] }}
                   />
-                  <span className="text-slate-600">{d.name}</span>
+                  <span className="text-slate-600 dark:text-slate-300">{d.name}</span>
                 </div>
-                <span className="text-slate-400">{pct}%</span>
+                <span className="text-slate-400 dark:text-slate-500">{pct}%</span>
               </div>
             );
           })}

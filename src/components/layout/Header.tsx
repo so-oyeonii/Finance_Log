@@ -1,30 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { GraduationCap, Briefcase, Save, ArrowLeftRight, Settings } from 'lucide-react';
+import { GraduationCap, Briefcase, ArrowLeftRight, Settings } from 'lucide-react';
 import { useAppStore } from '@/stores/useAppStore';
 import { MODES } from '@/config/modes';
-import { exportAllData } from '@/lib/db';
-import { ApiKeyModal } from './ApiKeyModal';
+import { SettingsModal } from './SettingsModal';
 
 export function Header() {
   const { mode, setMode, selectedYear, setSelectedYear } = useAppStore();
-  const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const modeConfig = MODES[mode];
 
   const handleModeToggle = () => {
     setMode(mode === 'graduate' ? 'worker' : 'graduate');
-  };
-
-  const handleBackup = async () => {
-    const data = await exportAllData();
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `smart_ledger_backup_${new Date().toISOString().slice(0, 10)}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
   };
 
   // Generate year options (current year ± 2)
@@ -81,31 +69,22 @@ export function Header() {
             ))}
           </select>
 
-          {/* API Key Settings */}
+          {/* Settings */}
           <button
-            onClick={() => setIsApiKeyModalOpen(true)}
+            onClick={() => setIsSettingsOpen(true)}
             className={`text-xs ${accentColor} ${hoverColor} px-2 py-1.5 rounded flex items-center gap-1 border ${borderColor}`}
-            title="API Key 설정"
+            title="설정"
           >
             <Settings className="w-3 h-3" />
             <span className="hidden sm:inline">설정</span>
-          </button>
-
-          {/* Backup */}
-          <button
-            onClick={handleBackup}
-            className={`text-xs ${accentColor} ${hoverColor} px-3 py-1.5 rounded flex items-center gap-1 border ${borderColor}`}
-          >
-            <Save className="w-3 h-3" />
-            <span className="hidden sm:inline">백업</span>
           </button>
         </div>
       </div>
     </header>
 
-      <ApiKeyModal
-        isOpen={isApiKeyModalOpen}
-        onClose={() => setIsApiKeyModalOpen(false)}
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
       />
     </>
   );

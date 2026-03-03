@@ -40,7 +40,7 @@ export function ChatInput({ onSend, isLoading, isGraduate }: ChatInputProps) {
   };
 
   return (
-    <div className="flex items-end gap-2 bg-white rounded-xl shadow-sm p-2">
+    <div className="flex items-end gap-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm p-2">
       <textarea
         ref={textareaRef}
         value={text}
@@ -50,7 +50,7 @@ export function ChatInput({ onSend, isLoading, isGraduate }: ChatInputProps) {
         placeholder="메시지를 입력하세요..."
         disabled={isLoading}
         rows={1}
-        className="flex-1 resize-none border-0 bg-transparent text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none disabled:opacity-50 py-2 px-2"
+        className="flex-1 resize-none border-0 bg-transparent text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none disabled:opacity-50 py-2 px-2"
       />
       <button
         onClick={handleSend}

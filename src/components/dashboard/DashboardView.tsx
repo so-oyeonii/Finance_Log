@@ -97,7 +97,7 @@ export function DashboardView() {
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-bold text-slate-700">대시보드</h2>
+        <h2 className="text-sm font-bold text-slate-700 dark:text-slate-200">대시보드</h2>
         <button
           onClick={() => setIsEditingLayout(!isEditingLayout)}
           className={cn(

@@ -20,9 +20,9 @@ export function SavingsList({ savings, mode, onAdd, onDelete }: SavingsListProps
       {/* Section Header */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <PiggyBank className="w-4 h-4 text-slate-500" />
-          <h3 className="text-sm font-bold text-slate-700">예적금 관리</h3>
-          <span className="text-xs px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-500">
+          <PiggyBank className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+          <h3 className="text-sm font-bold text-slate-700 dark:text-slate-200">예적금 관리</h3>
+          <span className="text-xs px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400">
             {savings.length}
           </span>
         </div>
@@ -46,10 +46,10 @@ export function SavingsList({ savings, mode, onAdd, onDelete }: SavingsListProps
           ))}
         </div>
       ) : (
-        <div className="bg-white rounded-xl shadow-sm p-8 text-center">
-          <PiggyBank className="w-10 h-10 text-slate-300 mx-auto mb-2" />
-          <p className="text-sm text-slate-400">등록된 예적금이 없습니다</p>
-          <p className="text-xs text-slate-300 mt-1">위의 추가 버튼을 눌러 등록해보세요</p>
+        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-8 text-center">
+          <PiggyBank className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto mb-2" />
+          <p className="text-sm text-slate-400 dark:text-slate-500">등록된 예적금이 없습니다</p>
+          <p className="text-xs text-slate-300 dark:text-slate-600 mt-1">위의 추가 버튼을 눌러 등록해보세요</p>
         </div>
       )}
     </div>

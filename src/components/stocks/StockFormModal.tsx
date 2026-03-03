@@ -107,23 +107,23 @@ export function StockFormModal({ accounts, mode, onSubmit, onClose }: StockFormM
     ? 'bg-indigo-600 hover:bg-indigo-700'
     : 'bg-emerald-600 hover:bg-emerald-700';
 
-  const inputClass = 'w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 transition-colors';
+  const inputClass = 'w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 transition-colors';
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-end md:items-center justify-center animate-fade-in">
-      <div className="bg-white w-full md:w-[28rem] rounded-t-2xl md:rounded-2xl p-6 max-h-[85vh] overflow-y-auto animate-slide-up">
+      <div className="bg-white dark:bg-slate-800 w-full md:w-[28rem] rounded-t-2xl md:rounded-2xl p-6 max-h-[85vh] overflow-y-auto animate-slide-up">
         {/* Header */}
         <div className="flex items-center justify-between mb-5">
-          <h3 className="font-bold text-lg text-slate-800">주식/코인 거래 추가</h3>
-          <button onClick={onClose} className="p-1 hover:bg-slate-100 rounded-full">
-            <X className="w-5 h-5 text-slate-400" />
+          <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100">주식/코인 거래 추가</h3>
+          <button onClick={onClose} className="p-1 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full">
+            <X className="w-5 h-5 text-slate-400 dark:text-slate-500" />
           </button>
         </div>
 
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
           {/* Type Toggle */}
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">거래유형</label>
+            <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">거래유형</label>
             <div className="flex gap-2">
               {typeOptions.map((t) => (
                 <button
@@ -132,7 +132,7 @@ export function StockFormModal({ accounts, mode, onSubmit, onClose }: StockFormM
                   onClick={() => setValue('type', t.key)}
                   className={cn(
                     'flex-1 py-2 rounded-lg text-sm font-medium transition-colors',
-                    watchedType === t.key ? t.color : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+                    watchedType === t.key ? t.color : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600'
                   )}
                 >
                   {t.label}
@@ -143,7 +143,7 @@ export function StockFormModal({ accounts, mode, onSubmit, onClose }: StockFormM
 
           {/* Date */}
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">날짜</label>
+            <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">날짜</label>
             <input
               type="date"
               {...register('date')}
@@ -153,7 +153,7 @@ export function StockFormModal({ accounts, mode, onSubmit, onClose }: StockFormM
 
           {/* Market */}
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">시장</label>
+            <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">시장</label>
             <select
               {...register('market')}
               className={cn(inputClass, 'cursor-pointer')}
@@ -166,7 +166,7 @@ export function StockFormModal({ accounts, mode, onSubmit, onClose }: StockFormM
 
           {/* Ticker */}
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">종목명</label>
+            <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">종목명</label>
             <input
               {...register('ticker')}
               placeholder="예: 삼성전자, AAPL"
@@ -177,7 +177,7 @@ export function StockFormModal({ accounts, mode, onSubmit, onClose }: StockFormM
 
           {/* Currency Toggle */}
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">통화</label>
+            <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">통화</label>
             <div className="flex gap-2">
               {(['KRW', 'USD'] as const).map((c) => (
                 <button
@@ -187,8 +187,8 @@ export function StockFormModal({ accounts, mode, onSubmit, onClose }: StockFormM
                   className={cn(
                     'flex-1 py-2 rounded-lg text-sm font-medium transition-colors',
                     watchedCurrency === c
-                      ? 'bg-slate-700 text-white'
-                      : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+                      ? 'bg-slate-700 dark:bg-slate-600 text-white'
+                      : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600'
                   )}
                 >
                   {c === 'KRW' ? '원 (KRW)' : '달러 (USD)'}
@@ -199,7 +199,7 @@ export function StockFormModal({ accounts, mode, onSubmit, onClose }: StockFormM
 
           {/* Price */}
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">
+            <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">
               {watchedType === 'dividend' ? '배당금액' : '단가'} ({watchedCurrency === 'KRW' ? '원' : '$'})
             </label>
             <input
@@ -215,7 +215,7 @@ export function StockFormModal({ accounts, mode, onSubmit, onClose }: StockFormM
           {/* Exchange Rate (USD only) */}
           {watchedCurrency === 'USD' && (
             <div>
-              <label className="block text-xs font-medium text-slate-600 mb-1">환율 (₩/$)</label>
+              <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">환율 (₩/$)</label>
               <input
                 type="number"
                 step="any"
@@ -229,7 +229,7 @@ export function StockFormModal({ accounts, mode, onSubmit, onClose }: StockFormM
           {/* Quantity (hidden for dividends) */}
           {watchedType !== 'dividend' && (
             <div>
-              <label className="block text-xs font-medium text-slate-600 mb-1">수량</label>
+              <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">수량</label>
               <input
                 type="number"
                 step="any"
@@ -242,7 +242,7 @@ export function StockFormModal({ accounts, mode, onSubmit, onClose }: StockFormM
 
           {/* Account */}
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">계좌</label>
+            <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">계좌</label>
             <select
               {...register('accountId', { valueAsNumber: true })}
               className={cn(inputClass, 'cursor-pointer', errors.accountId && 'border-red-300')}
@@ -257,7 +257,7 @@ export function StockFormModal({ accounts, mode, onSubmit, onClose }: StockFormM
 
           {/* Memo */}
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">메모</label>
+            <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">메모</label>
             <input
               {...register('memo')}
               placeholder="메모 (선택)"
@@ -272,9 +272,9 @@ export function StockFormModal({ accounts, mode, onSubmit, onClose }: StockFormM
                 type="checkbox"
                 id="isInitial"
                 {...register('isInitial')}
-                className="rounded border-slate-300"
+                className="rounded border-slate-300 dark:border-slate-600"
               />
-              <label htmlFor="isInitial" className="text-xs text-slate-600 cursor-pointer">
+              <label htmlFor="isInitial" className="text-xs text-slate-600 dark:text-slate-300 cursor-pointer">
                 초기 보유분 (계좌 잔액 차감 안함)
               </label>
             </div>

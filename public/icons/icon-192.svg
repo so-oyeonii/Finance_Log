@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <rect width="192" height="192" rx="32" fill="#4f46e5"/>
+  <text x="96" y="120" text-anchor="middle" font-size="100" font-family="Arial, sans-serif" fill="white" font-weight="bold">$</text>
+  <text x="96" y="165" text-anchor="middle" font-size="28" font-family="Arial, sans-serif" fill="rgba(255,255,255,0.8)">PRO</text>
+</svg>

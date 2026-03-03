@@ -18,21 +18,21 @@ export function ExpenseTop3Widget({ data, mode }: ExpenseTop3WidgetProps) {
 
   if (top3.length === 0) {
     return (
-      <div className="bg-white rounded-xl shadow-sm p-4 animate-fade-in">
+      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-4 animate-fade-in">
         <div className="flex items-center gap-2 mb-3">
           <Flame className="w-4 h-4 text-red-500" />
-          <h3 className="text-sm font-bold text-slate-700">지출 Top 3</h3>
+          <h3 className="text-sm font-bold text-slate-700 dark:text-slate-200">지출 Top 3</h3>
         </div>
-        <p className="text-xs text-slate-400 text-center py-4">지출 내역이 없습니다</p>
+        <p className="text-xs text-slate-400 dark:text-slate-500 text-center py-4">지출 내역이 없습니다</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm p-4 animate-fade-in">
+    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-4 animate-fade-in">
       <div className="flex items-center gap-2 mb-3">
         <Flame className="w-4 h-4 text-red-500" />
-        <h3 className="text-sm font-bold text-slate-700">지출 Top 3</h3>
+        <h3 className="text-sm font-bold text-slate-700 dark:text-slate-200">지출 Top 3</h3>
       </div>
 
       <div className="space-y-3">
@@ -43,13 +43,13 @@ export function ExpenseTop3Widget({ data, mode }: ExpenseTop3WidgetProps) {
           return (
             <div key={item.name}>
               <div className="flex items-center justify-between text-xs mb-1">
-                <span className="text-slate-600 font-medium">{item.name}</span>
+                <span className="text-slate-600 dark:text-slate-300 font-medium">{item.name}</span>
                 <div className="flex items-center gap-2">
-                  <span className="text-slate-400">{pct}%</span>
-                  <span className="text-slate-700 font-medium">{formatKRW(item.value)}</span>
+                  <span className="text-slate-400 dark:text-slate-500">{pct}%</span>
+                  <span className="text-slate-700 dark:text-slate-200 font-medium">{formatKRW(item.value)}</span>
                 </div>
               </div>
-              <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+              <div className="h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
                 <div
                   className={`h-full ${BAR_COLORS[idx]} rounded-full transition-all duration-500`}
                   style={{ width: `${Math.max(width, 3)}%` }}

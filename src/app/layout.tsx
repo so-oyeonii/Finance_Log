@@ -21,7 +21,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko" suppressHydrationWarning>
-      <body className="min-h-screen bg-slate-50 antialiased">
+      <head>
+        {/* FOUC prevention: apply dark class before paint */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');var d=t==='"dark"'||t==='dark'||((!t||t==='"system"'||t==='system')&&window.matchMedia('(prefers-color-scheme:dark)').matches);if(d)document.documentElement.classList.add('dark')}catch(e){}})()`,
+          }}
+        />
+      </head>
+      <body className="min-h-screen bg-slate-50 dark:bg-slate-900 antialiased transition-colors">
         {children}
       </body>
     </html>

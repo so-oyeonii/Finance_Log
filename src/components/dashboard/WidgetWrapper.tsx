@@ -33,7 +33,7 @@ export function WidgetWrapper({ id, isEditing, children }: WidgetWrapperProps) {
         <button
           {...attributes}
           {...listeners}
-          className="absolute -left-1 top-3 z-10 p-1 rounded-md bg-white shadow-md border border-slate-200 text-slate-400 hover:text-slate-600 cursor-grab active:cursor-grabbing"
+          className="absolute -left-1 top-3 z-10 p-1 rounded-md bg-white dark:bg-slate-800 shadow-md border border-slate-200 dark:border-slate-600 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 cursor-grab active:cursor-grabbing"
         >
           <GripVertical className="w-4 h-4" />
         </button>

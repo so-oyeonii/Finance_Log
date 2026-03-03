@@ -7,10 +7,26 @@ import { getCurrentYear } from '@/lib/format';
 // Global App State
 // ============================================
 
+export type ThemeMode = 'light' | 'dark' | 'system';
+
+function applyTheme(theme: ThemeMode) {
+  if (typeof window === 'undefined') return;
+  const root = document.documentElement;
+  const isDark =
+    theme === 'dark' ||
+    (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  root.classList.toggle('dark', isDark);
+  localStorage.setItem('theme', theme);
+}
+
 interface AppState {
   // App mode
   mode: AppMode;
   setMode: (mode: AppMode) => void;
+
+  // Theme
+  theme: ThemeMode;
+  setTheme: (theme: ThemeMode) => void;
 
   // Selected year for filtering
   selectedYear: string;
@@ -40,6 +56,7 @@ interface AppState {
 
 export const useAppStore = create<AppState>((set) => ({
   mode: 'graduate',
+  theme: 'system',
   selectedYear: getCurrentYear(),
   activeTab: 'dashboard',
   dashboardLayout: [
@@ -53,6 +70,12 @@ export const useAppStore = create<AppState>((set) => ({
   setMode: async (mode) => {
     set({ mode });
     await setSetting('appMode', mode);
+  },
+
+  setTheme: async (theme) => {
+    set({ theme });
+    applyTheme(theme);
+    await setSetting('theme', theme);
   },
 
   setSelectedYear: (year) => set({ selectedYear: year }),
@@ -74,11 +97,13 @@ export const useAppStore = create<AppState>((set) => ({
 
   initialize: async () => {
     const mode = await getSetting<AppMode>('appMode', 'graduate');
+    const theme = await getSetting<ThemeMode>('theme', 'system');
     const layout = await getSetting<string[]>('dashboardLayout', [
       'netWorth', 'dividendChart', 'incomeChart', 'expenseChart',
       'portfolio', 'expenseTop3', 'investComp', 'aiReport',
     ]);
     const openaiApiKey = await getSetting<string>('openaiApiKey', '');
-    set({ mode, dashboardLayout: layout, openaiApiKey, isDataLoaded: true });
+    applyTheme(theme);
+    set({ mode, theme, dashboardLayout: layout, openaiApiKey, isDataLoaded: true });
   },
 }));
