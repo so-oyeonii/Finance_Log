@@ -5,6 +5,7 @@ import { X, Eye, EyeOff, Trash2, Sun, Moon, Monitor, Download, Upload } from 'lu
 import { useAppStore, type ThemeMode } from '@/stores/useAppStore';
 import { exportAllData, validateBackupData, importAllData } from '@/lib/db';
 import { ImportConfirmModal } from './ImportConfirmModal';
+import { SyncSection } from './SyncSection';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -20,7 +21,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
   // Import state
   const [importData, setImportData] = useState<{
     fileName: string;
-    data: ReturnType<typeof validateBackupData> extends { data: infer T } ? T : never;
+    data: Awaited<ReturnType<typeof exportAllData>>;
     counts: Record<string, number>;
   } | null>(null);
 
@@ -211,6 +212,9 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               />
             </div>
           </div>
+
+          {/* Cloud Sync Section */}
+          <SyncSection />
         </div>
       </div>
     </div>

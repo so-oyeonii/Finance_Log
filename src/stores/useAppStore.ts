@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import type { AppMode } from '@/types';
 import { getSetting, setSetting } from '@/lib/db';
 import { getCurrentYear } from '@/lib/format';
+import { clearSupabaseClient } from '@/lib/supabase';
 
 // ============================================
 // Global App State
@@ -46,6 +47,11 @@ interface AppState {
   openaiApiKey: string;
   setOpenaiApiKey: (key: string) => void;
 
+  // Supabase config (user-provided, fallback if no env vars)
+  supabaseUrl: string;
+  supabaseAnonKey: string;
+  setSupabaseConfig: (url: string, key: string) => void;
+
   // UI states
   isDataLoaded: boolean;
   setIsDataLoaded: (loaded: boolean) => void;
@@ -65,6 +71,8 @@ export const useAppStore = create<AppState>((set) => ({
   ],
   isEditingLayout: false,
   openaiApiKey: '',
+  supabaseUrl: '',
+  supabaseAnonKey: '',
   isDataLoaded: false,
 
   setMode: async (mode) => {
@@ -93,6 +101,13 @@ export const useAppStore = create<AppState>((set) => ({
     await setSetting('openaiApiKey', key);
   },
 
+  setSupabaseConfig: async (url, key) => {
+    set({ supabaseUrl: url, supabaseAnonKey: key });
+    clearSupabaseClient();
+    await setSetting('supabaseUrl', url);
+    await setSetting('supabaseAnonKey', key);
+  },
+
   setIsDataLoaded: (loaded) => set({ isDataLoaded: loaded }),
 
   initialize: async () => {
@@ -103,7 +118,9 @@ export const useAppStore = create<AppState>((set) => ({
       'portfolio', 'expenseTop3', 'investComp', 'aiReport',
     ]);
     const openaiApiKey = await getSetting<string>('openaiApiKey', '');
+    const supabaseUrl = await getSetting<string>('supabaseUrl', '');
+    const supabaseAnonKey = await getSetting<string>('supabaseAnonKey', '');
     applyTheme(theme);
-    set({ mode, theme, dashboardLayout: layout, openaiApiKey, isDataLoaded: true });
+    set({ mode, theme, dashboardLayout: layout, openaiApiKey, supabaseUrl, supabaseAnonKey, isDataLoaded: true });
   },
 }));
