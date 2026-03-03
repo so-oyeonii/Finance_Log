@@ -74,6 +74,19 @@ export function useAi() {
     return res.json();
   };
 
+  const scanAssets = async (
+    image: string,
+    mimeType: string
+  ): Promise<{ accounts: { bank: string; name: string; type: string; balance: number }[] }> => {
+    const res = await fetch('/api/ai/asset-scan', {
+      method: 'POST',
+      headers: headers(),
+      body: JSON.stringify({ image, mimeType }),
+    });
+    if (!res.ok) throw new Error('스크린샷 분석에 실패했습니다.');
+    return res.json();
+  };
+
   const textToSpeech = async (text: string): Promise<Blob> => {
     const res = await fetch('/api/ai/tts', {
       method: 'POST',
@@ -84,5 +97,5 @@ export function useAi() {
     return res.blob();
   };
 
-  return { sendChat, smartInput, analyzeFinance, scanReceipt, textToSpeech };
+  return { sendChat, smartInput, analyzeFinance, scanReceipt, scanAssets, textToSpeech };
 }

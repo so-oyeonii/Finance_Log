@@ -11,7 +11,9 @@ import { AccountFormModal } from './AccountFormModal';
 import { DeleteConfirmModal } from './DeleteConfirmModal';
 import { SavingsList } from './SavingsList';
 import { SavingsFormModal } from './SavingsFormModal';
-import type { Account, Savings } from '@/types';
+import { AssetScanButton } from './AssetScanButton';
+import { AssetScanResultModal } from './AssetScanResultModal';
+import type { Account, AccountType, Savings } from '@/types';
 import { cn } from '@/lib/utils';
 
 export function AssetsView() {
@@ -24,6 +26,7 @@ export function AssetsView() {
   const [editingAccount, setEditingAccount] = useState<Account | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<{ type: 'account' | 'savings'; item: Account | Savings } | null>(null);
   const [showSavingsForm, setShowSavingsForm] = useState(false);
+  const [scanResult, setScanResult] = useState<{ bank: string; name: string; type: string; balance: number }[] | null>(null);
 
   const isGraduate = mode === 'graduate';
 
@@ -62,12 +65,34 @@ export function AssetsView() {
     setShowSavingsForm(false);
   };
 
+  const handleScanSave = async (items: { account: { bank: string; name: string; type: string; balance: number }; matchedAccountId: number | null }[]) => {
+    for (const item of items) {
+      if (item.matchedAccountId) {
+        await updateAccount(item.matchedAccountId, {
+          balance: item.account.balance,
+        });
+      } else {
+        await addAccount({
+          bank: item.account.bank,
+          name: item.account.name,
+          type: item.account.type as AccountType,
+          balance: item.account.balance,
+          principal: item.account.balance,
+        });
+      }
+    }
+    setScanResult(null);
+  };
+
   const bankNames = Object.keys(groupedAccounts);
 
   return (
     <div className="space-y-6">
       {/* Summary */}
       <AssetsSummary totalBalance={totalBalance} accountCount={accounts.length} mode={mode} />
+
+      {/* Asset Screenshot Scan */}
+      <AssetScanButton mode={mode} onResult={(accs) => setScanResult(accs)} />
 
       {/* Accounts Section */}
       <div>
@@ -130,6 +155,17 @@ export function AssetsView() {
           mode={mode}
           onSubmit={handleSavingsSubmit}
           onClose={() => setShowSavingsForm(false)}
+        />
+      )}
+
+      {/* Asset Scan Result Modal */}
+      {scanResult && (
+        <AssetScanResultModal
+          scannedAccounts={scanResult}
+          existingAccounts={accounts}
+          mode={mode}
+          onSave={handleScanSave}
+          onClose={() => setScanResult(null)}
         />
       )}
 
