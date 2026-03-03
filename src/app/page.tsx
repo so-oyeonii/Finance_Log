@@ -8,10 +8,10 @@ import { Loader2 } from 'lucide-react';
 
 import { AssetsView } from '@/components/assets/AssetsView';
 import { LedgerView } from '@/components/ledger/LedgerView';
+import { StocksView } from '@/components/stocks/StocksView';
 
 // Lazy-loaded tab pages (will be created in later phases)
 // import { DashboardView } from '@/components/dashboard/DashboardView';
-// import { StocksView } from '@/components/stocks/StocksView';
 // import { ChatView } from '@/components/chat/ChatView';
 
 export default function HomePage() {
@@ -45,12 +45,7 @@ export default function HomePage() {
         )}
         {activeTab === 'assets' && <AssetsView />}
         {activeTab === 'ledger' && <LedgerView />}
-        {activeTab === 'stocks' && (
-          <div className="text-center py-20 text-slate-400">
-            <p className="text-lg font-medium mb-2">📈 주식/코인</p>
-            <p className="text-sm">Phase 4에서 구현 예정</p>
-          </div>
-        )}
+        {activeTab === 'stocks' && <StocksView />}
         {activeTab === 'chat' && (
           <div className="text-center py-20 text-slate-400">
             <p className="text-lg font-medium mb-2">🤖 AI 멘토</p>
