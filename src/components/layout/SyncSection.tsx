@@ -1,21 +1,23 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Cloud, CloudUpload, CloudDownload, LogIn, LogOut, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
+import { Cloud, CloudUpload, CloudDownload, LogIn, LogOut, Loader2, CheckCircle, AlertCircle, Database } from 'lucide-react';
 import { useAppStore } from '@/stores/useAppStore';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { useSync } from '@/hooks/useSync';
 import { hasEnvConfig } from '@/lib/supabase';
 import { AuthModal } from '@/components/auth/AuthModal';
+import { MigrateModal } from '@/components/supabase/MigrateModal';
 
 export function SyncSection() {
   const { supabaseUrl, supabaseAnonKey, setSupabaseConfig } = useAppStore();
   const { user, signOut, initAuth } = useAuthStore();
-  const { push, pull, lastSyncedAt, syncStatus, isConfigured, isReady } = useSync();
+  const { push, pull, lastSyncedAt, syncStatus, isConfigured, isReady, tablesReady, recheckTables } = useSync();
 
   const [inputUrl, setInputUrl] = useState('');
   const [inputKey, setInputKey] = useState('');
   const [showAuth, setShowAuth] = useState(false);
+  const [showMigrate, setShowMigrate] = useState(false);
   const envConfigured = hasEnvConfig();
 
   useEffect(() => {
@@ -50,6 +52,9 @@ export function SyncSection() {
   };
 
   const isSyncing = syncStatus === 'pushing' || syncStatus === 'pulling';
+
+  // Determine the effective Supabase URL for migration
+  const effectiveUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || supabaseUrl;
 
   return (
     <>
@@ -102,6 +107,29 @@ export function SyncSection() {
               Supabase 프로젝트의 URL과 anon key를 입력하세요.
             </p>
           </div>
+        )}
+
+        {/* Table Status */}
+        {isConfigured && tablesReady === false && (
+          <div className="mb-3">
+            <button
+              onClick={() => setShowMigrate(true)}
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium border border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-300 hover:bg-orange-100 dark:hover:bg-orange-900/40 transition-colors"
+            >
+              <Database className="w-4 h-4" />
+              데이터베이스 테이블 생성
+            </button>
+            <p className="text-xs text-orange-500 dark:text-orange-400 mt-1.5">
+              동기화를 사용하려면 먼저 데이터베이스 테이블을 생성해야 합니다.
+            </p>
+          </div>
+        )}
+
+        {isConfigured && tablesReady === true && (
+          <p className="text-xs text-green-600 dark:text-green-400 mb-3 flex items-center gap-1">
+            <CheckCircle className="w-3.5 h-3.5" />
+            데이터베이스 테이블이 준비되었습니다.
+          </p>
         )}
 
         {/* Auth Status */}
@@ -183,6 +211,12 @@ export function SyncSection() {
       </div>
 
       <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} />
+      <MigrateModal
+        isOpen={showMigrate}
+        onClose={() => setShowMigrate(false)}
+        supabaseUrl={effectiveUrl}
+        onSuccess={recheckTables}
+      />
     </>
   );
 }

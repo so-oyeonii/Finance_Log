@@ -1,9 +1,10 @@
+// Idempotent migration SQL for Supabase cloud sync tables.
+// All statements use IF NOT EXISTS / DROP IF EXISTS to be safely re-runnable.
+
+export const MIGRATION_SQL = `
 -- ============================================
 -- Smart Ledger Pro — Supabase Migration (Idempotent)
 -- ============================================
--- Run this SQL in Supabase SQL Editor to set up cloud sync tables.
--- All tables use sl_ prefix to avoid conflicts.
--- Safe to run multiple times (IF NOT EXISTS / DROP IF EXISTS).
 
 -- 1. sl_accounts
 CREATE TABLE IF NOT EXISTS sl_accounts (
@@ -134,10 +135,20 @@ DROP POLICY IF EXISTS "Users can manage own recurring" ON sl_recurring;
 CREATE POLICY "Users can manage own recurring" ON sl_recurring
   FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 
--- Indexes
+-- Indexes (IF NOT EXISTS)
 CREATE INDEX IF NOT EXISTS idx_sl_accounts_user ON sl_accounts(user_id);
 CREATE INDEX IF NOT EXISTS idx_sl_transactions_user ON sl_transactions(user_id);
 CREATE INDEX IF NOT EXISTS idx_sl_stocks_user ON sl_stocks(user_id);
 CREATE INDEX IF NOT EXISTS idx_sl_stock_prices_user ON sl_stock_prices(user_id);
 CREATE INDEX IF NOT EXISTS idx_sl_savings_user ON sl_savings(user_id);
 CREATE INDEX IF NOT EXISTS idx_sl_recurring_user ON sl_recurring(user_id);
+`;
+
+export const EXPECTED_TABLES = [
+  'sl_accounts',
+  'sl_transactions',
+  'sl_stocks',
+  'sl_stock_prices',
+  'sl_savings',
+  'sl_recurring',
+];
