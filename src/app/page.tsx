@@ -9,10 +9,7 @@ import { Loader2 } from 'lucide-react';
 import { AssetsView } from '@/components/assets/AssetsView';
 import { LedgerView } from '@/components/ledger/LedgerView';
 import { StocksView } from '@/components/stocks/StocksView';
-
-// Lazy-loaded tab pages (will be created in later phases)
-// import { DashboardView } from '@/components/dashboard/DashboardView';
-// import { ChatView } from '@/components/chat/ChatView';
+import { DashboardView } from '@/components/dashboard/DashboardView';
 
 export default function HomePage() {
   const { activeTab, isDataLoaded, initialize } = useAppStore();
@@ -37,12 +34,7 @@ export default function HomePage() {
 
       <main className="max-w-4xl mx-auto p-4 space-y-6">
         {/* TODO: Phase별로 각 탭 컴포넌트 연결 */}
-        {activeTab === 'dashboard' && (
-          <div className="text-center py-20 text-slate-400">
-            <p className="text-lg font-medium mb-2">📊 대시보드</p>
-            <p className="text-sm">Phase 5에서 구현 예정</p>
-          </div>
-        )}
+        {activeTab === 'dashboard' && <DashboardView />}
         {activeTab === 'assets' && <AssetsView />}
         {activeTab === 'ledger' && <LedgerView />}
         {activeTab === 'stocks' && <StocksView />}

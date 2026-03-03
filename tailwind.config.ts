@@ -10,11 +10,30 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Mode-specific colors can be added here
+        border: 'hsl(var(--border))',
+        ring: 'hsl(var(--ring))',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        primary: {
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
+        },
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
+        },
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
+        },
+      },
+      borderColor: {
+        DEFAULT: 'hsl(var(--border))',
       },
       animation: {
         'fade-in': 'fadeIn 0.3s ease-in-out',
         'slide-up': 'slideUp 0.3s ease-out',
+        'wiggle': 'wiggle 0.3s ease-in-out infinite',
       },
       keyframes: {
         fadeIn: {
@@ -24,6 +43,10 @@ const config: Config = {
         slideUp: {
           '0%': { opacity: '0', transform: 'translateY(10px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        wiggle: {
+          '0%, 100%': { transform: 'rotate(-0.5deg)' },
+          '50%': { transform: 'rotate(0.5deg)' },
         },
       },
     },

@@ -80,8 +80,8 @@ export async function exportAllData() {
 
 export async function importAllData(backup: Awaited<ReturnType<typeof exportAllData>>) {
   await db.transaction('rw',
-    db.accounts, db.transactions, db.stocks,
-    db.stockPrices, db.savings, db.recurring, db.settings,
+    [db.accounts, db.transactions, db.stocks,
+    db.stockPrices, db.savings, db.recurring, db.settings],
     async () => {
       // Clear all tables
       await Promise.all([
