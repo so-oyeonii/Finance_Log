@@ -22,7 +22,7 @@ interface HoldingCardProps {
 export function HoldingCard({ holding, onPriceUpdate }: HoldingCardProps) {
   const {
     market, ticker, qty, avgPrice, currentPrice,
-    valuation, unrealizedGain, returnRate, totalDiv, divYield, accName,
+    valuation, unrealizedGain, returnRate, totalDiv, divYield, accName, hasInitial,
   } = holding;
 
   const isPositive = unrealizedGain >= 0;
@@ -36,6 +36,14 @@ export function HoldingCard({ holding, onPriceUpdate }: HoldingCardProps) {
             {market}
           </span>
           <span className="text-sm font-bold text-slate-800 dark:text-slate-100">{ticker}</span>
+          {hasInitial && (
+            <span
+              className="text-[9px] font-medium px-1.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 cursor-help"
+              title="기준일 스냅샷으로 등록된 초기 보유분이 포함되어 있어요. 실현손익 계산은 참고용입니다."
+            >
+              스냅샷
+            </span>
+          )}
         </div>
         <button
           onClick={() => onPriceUpdate(holding)}

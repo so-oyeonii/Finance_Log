@@ -54,6 +54,7 @@ export function calculatePortfolio(
     qty: number;
     avgPrice: number;
     totalCost: number;
+    hasInitial: boolean;
   }> = {};
 
   let totalRealizedGain = 0;
@@ -75,6 +76,7 @@ export function calculatePortfolio(
         qty: 0,
         avgPrice: 0,
         totalCost: 0,
+        hasInitial: false,
       };
     }
 
@@ -85,6 +87,7 @@ export function calculatePortfolio(
       h.totalCost += cost;
       h.qty += s.quantity;
       h.avgPrice = h.qty > 0 ? h.totalCost / h.qty : 0;
+      if (s.isInitial) h.hasInitial = true;
     } else if (s.type === 'sell') {
       const costBasis = h.avgPrice * s.quantity;
       totalRealizedGain += (s.price * s.quantity) - costBasis;
@@ -125,6 +128,7 @@ export function calculatePortfolio(
         divYield,
         accName,
         priceKey,
+        hasInitial: d.hasInitial,
       };
     });
 

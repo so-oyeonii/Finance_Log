@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useAppStore } from '@/stores/useAppStore';
 import { Header } from '@/components/layout/Header';
 import { Navigation } from '@/components/layout/Navigation';
+import { OnboardingModal } from '@/components/layout/OnboardingModal';
 import { Loader2 } from 'lucide-react';
 
 import { AssetsView } from '@/components/assets/AssetsView';
@@ -54,6 +55,8 @@ export default function HomePage() {
         {activeTab === 'stocks' && <StocksView />}
         {activeTab === 'chat' && <ChatView />}
       </main>
+
+      <OnboardingModal />
     </div>
   );
 }
