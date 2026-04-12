@@ -35,8 +35,9 @@ export const MODES: Record<AppMode, ModeConfig> = {
 한국어로 답변합니다.`,
     greeting: '안녕하세요! 🎓 대학원생 재무 멘토입니다. 연구비 관리부터 소액 투자까지, 무엇이든 물어보세요!',
     defaultDashboardOrder: [
-      'netWorth', 'dividendChart', 'incomeChart', 'expenseChart',
-      'portfolio', 'expenseTop3', 'investComp', 'aiReport',
+      'incomeInsight', 'spendLimit', 'netWorth', 'savingsMaturity',
+      'incomeChart', 'expenseChart', 'rebalancing', 'portfolio',
+      'dividendChart', 'expenseTop3', 'capitalGainsTax', 'investComp', 'aiReport',
     ],
   },
 
@@ -58,9 +59,37 @@ export const MODES: Record<AppMode, ModeConfig> = {
 친근하지만 프로페셔널한 톤으로 한국어 답변합니다.`,
     greeting: '안녕하세요! 💼 직장인 재무 멘토입니다. 월급 관리부터 투자 전략까지 도와드릴게요!',
     defaultDashboardOrder: [
-      'netWorth', 'incomeChart', 'expenseChart', 'portfolio',
-      'expenseTop3', 'dividendChart', 'investComp', 'aiReport',
+      'incomeInsight', 'spendLimit', 'netWorth', 'incomeChart', 'expenseChart',
+      'rebalancing', 'savingsMaturity', 'portfolio', 'expenseTop3',
+      'dividendChart', 'capitalGainsTax', 'investComp', 'aiReport',
     ],
+  },
+};
+
+// ============================================
+// Income Stability Map
+// ============================================
+// fixed: 매달 거의 동일하게 들어옴 (월급, BK, 조교 등 예산의 기반)
+// semi : 있는 달/없는 달이 섞임 (과제, 부업 — 보조 수입)
+// lump : 연 1~2회 큰 금액 (장학금, 논문상금 — 버퍼/저축)
+export const INCOME_STABILITY: Record<AppMode, Record<string, 'fixed' | 'semi' | 'lump'>> = {
+  graduate: {
+    'BK 인건비': 'fixed',
+    '과제 인건비': 'semi',
+    '조교 수당': 'fixed',
+    '학회 스태프': 'semi',
+    '논문/상금': 'lump',
+    '장학금': 'lump',
+    '기타': 'semi',
+  },
+  worker: {
+    '월급': 'fixed',
+    '성과급': 'lump',
+    '야근수당': 'semi',
+    '인센티브': 'lump',
+    '부업/프리랜서': 'semi',
+    '투자수익': 'semi',
+    '기타': 'semi',
   },
 };
 

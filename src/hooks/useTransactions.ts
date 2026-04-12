@@ -2,6 +2,8 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useMemo } from 'react';
 import { db } from '@/lib/db';
 import { useAccounts } from './useAccounts';
+import { useAppStore } from '@/stores/useAppStore';
+import { computeIncomeInsights } from '@/lib/incomeStats';
 import type { Transaction, TransactionType, MonthlyStat } from '@/types';
 
 // ============================================
@@ -76,6 +78,17 @@ export function useTransactions(selectedYear: string) {
         .sort((a, b) => b.amount - a.amount),
     }));
   }, [yearlyTransactions, selectedYear]);
+
+  // 수입 인사이트 (대학원생 불규칙 수입 분석용)
+  const mode = useAppStore((s) => s.mode);
+  const incomeInsights = useMemo(() => {
+    const thisYear = String(new Date().getFullYear());
+    const isCurrentYear = selectedYear === thisYear;
+    return computeIncomeInsights(monthlyStats, mode, {
+      isCurrentYear,
+      currentMonthIdx: new Date().getMonth(),
+    });
+  }, [monthlyStats, mode, selectedYear]);
 
   // Available years
   const availableYears = useMemo(() => {
@@ -153,6 +166,7 @@ export function useTransactions(selectedYear: string) {
     summary,
     expenseByCategory,
     monthlyStats,
+    incomeInsights,
     availableYears,
     addTransaction,
     deleteTransaction,

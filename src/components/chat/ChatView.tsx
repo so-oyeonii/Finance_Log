@@ -18,7 +18,7 @@ interface Message {
 export function ChatView() {
   const { mode, selectedYear } = useAppStore();
   const { accounts, totalBalance } = useAccounts();
-  const { summary } = useTransactions(selectedYear);
+  const { summary, incomeInsights } = useTransactions(selectedYear);
   const { sendChat } = useAi();
 
   const modeConfig = MODES[mode];
@@ -52,8 +52,24 @@ export function ChatView() {
       totalAssets: totalBalance,
       monthlyExpense: Math.round(summary.expense / 12),
       accountSummary: accountSummary || '등록된 계좌 없음',
+      incomeStats: {
+        activeAvg: incomeInsights.activeAvg,
+        median: incomeInsights.median,
+        cv: incomeInsights.cv,
+        stabilityLabel: incomeInsights.stabilityLabel,
+        fixedMonthlyEstimate: incomeInsights.fixedMonthlyEstimate,
+        lumpYearlyTotal: incomeInsights.lumpYearlyTotal,
+        suggestedSpendLimit: incomeInsights.suggestedSpendLimit,
+        forecast: incomeInsights.forecast,
+        bySource: incomeInsights.byCategory.map((c) => ({
+          category: c.category,
+          avg: c.avg,
+          stability: c.stability,
+          cv: c.cv,
+        })),
+      },
     };
-  }, [accounts, totalBalance, summary.expense, modeConfig.aiPersonality]);
+  }, [accounts, totalBalance, summary.expense, modeConfig.aiPersonality, incomeInsights]);
 
   const handleSend = async (text: string) => {
     const userMsg: Message = { role: 'user', content: text };

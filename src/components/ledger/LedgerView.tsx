@@ -11,6 +11,7 @@ import { TransactionFormModal } from './TransactionFormModal';
 import { SmartInputButton } from './SmartInputButton';
 import { MonthlyChart } from './MonthlyChart';
 import { ExpenseByCategory } from './ExpenseByCategory';
+import { IncomeAnalysisSection } from './IncomeAnalysisSection';
 import { RecurringList } from './RecurringList';
 import { DeleteConfirmModal } from '@/components/assets/DeleteConfirmModal';
 import type { Transaction } from '@/types';
@@ -24,6 +25,7 @@ export function LedgerView() {
     summary,
     expenseByCategory,
     monthlyStats,
+    incomeInsights,
     addTransaction,
     updateTransaction,
     deleteTransaction,
@@ -92,6 +94,9 @@ export function LedgerView() {
         balance={summary.balance}
         mode={mode}
       />
+
+      {/* 수입 원천별 분석 (대학원생 불규칙 수입 대응) */}
+      <IncomeAnalysisSection insights={incomeInsights} />
 
       {/* Charts */}
       <ExpenseByCategory data={expenseByCategory} mode={mode} />

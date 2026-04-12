@@ -117,6 +117,7 @@ export interface Holding {
   divYield: number;
   accName: string;
   priceKey: string;
+  hasInitial: boolean;       // 기준일 스냅샷(초기 보유분)이 포함된 종목인지
 }
 
 export interface PortfolioSummary {
@@ -174,6 +175,18 @@ export interface AiSmartInputResponse {
   accountId?: number;
 }
 
+export interface IncomeStatsContext {
+  activeAvg: number;
+  median: number;
+  cv: number;
+  stabilityLabel: string;
+  fixedMonthlyEstimate: number;
+  lumpYearlyTotal: number;
+  suggestedSpendLimit: number;
+  forecast: { low: number; mid: number; high: number };
+  bySource: { category: string; avg: number; stability: string; cv: number }[];
+}
+
 export interface AiChatRequest {
   message: string;
   history: { role: 'user' | 'assistant'; content: string }[];
@@ -182,6 +195,7 @@ export interface AiChatRequest {
     totalAssets: number;
     monthlyExpense: number;
     accountSummary: string;
+    incomeStats?: IncomeStatsContext;
   };
 }
 
@@ -191,6 +205,7 @@ export interface AiAnalysisRequest {
   topExpenses: { name: string; value: number }[];
   portfolioGain: number;
   mode: AppMode;
+  incomeStats?: IncomeStatsContext;
 }
 
 export interface AiAnalysisResponse {

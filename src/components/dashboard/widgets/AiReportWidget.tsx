@@ -14,7 +14,7 @@ export function AiReportWidget() {
   const { mode, selectedYear } = useAppStore();
   const { accounts } = useAccounts();
   const { savings } = useSavings();
-  const { expenseByCategory } = useTransactions(selectedYear);
+  const { expenseByCategory, incomeInsights } = useTransactions(selectedYear);
   const { portfolio } = useStocks(selectedYear);
   const { analyzeFinance } = useAi();
 
@@ -36,6 +36,22 @@ export function AiReportWidget() {
         topExpenses,
         portfolioGain: portfolio.totalRealizedGain,
         mode,
+        incomeStats: {
+          activeAvg: incomeInsights.activeAvg,
+          median: incomeInsights.median,
+          cv: incomeInsights.cv,
+          stabilityLabel: incomeInsights.stabilityLabel,
+          fixedMonthlyEstimate: incomeInsights.fixedMonthlyEstimate,
+          lumpYearlyTotal: incomeInsights.lumpYearlyTotal,
+          suggestedSpendLimit: incomeInsights.suggestedSpendLimit,
+          forecast: incomeInsights.forecast,
+          bySource: incomeInsights.byCategory.map((c) => ({
+            category: c.category,
+            avg: c.avg,
+            stability: c.stability,
+            cv: c.cv,
+          })),
+        },
       });
       setReport(result);
     } catch (err: any) {
