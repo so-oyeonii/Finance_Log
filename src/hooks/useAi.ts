@@ -87,6 +87,28 @@ export function useAi() {
     return res.json();
   };
 
+  const scanStocks = async (
+    image: string,
+    mimeType: string
+  ): Promise<{
+    holdings: {
+      market: string;
+      ticker: string;
+      quantity: number;
+      avgPrice: number;
+      currency: 'KRW' | 'USD';
+      inputPrice?: number;
+    }[];
+  }> => {
+    const res = await fetch('/api/ai/stock-scan', {
+      method: 'POST',
+      headers: headers(),
+      body: JSON.stringify({ image, mimeType }),
+    });
+    if (!res.ok) throw new Error('주식 스크린샷 분석에 실패했습니다.');
+    return res.json();
+  };
+
   const textToSpeech = async (text: string): Promise<Blob> => {
     const res = await fetch('/api/ai/tts', {
       method: 'POST',
@@ -97,5 +119,48 @@ export function useAi() {
     return res.blob();
   };
 
-  return { sendChat, smartInput, analyzeFinance, scanReceipt, scanAssets, textToSpeech };
+  const scanSavings = async (
+    image: string,
+    mimeType: string
+  ): Promise<{
+    savings: {
+      type: '예금' | '적금';
+      name: string;
+      amount: number;
+      rate: number;
+      term: number;
+      startDate: string;
+    }[];
+  }> => {
+    const res = await fetch('/api/ai/savings-scan', {
+      method: 'POST',
+      headers: headers(),
+      body: JSON.stringify({ image, mimeType }),
+    });
+    if (!res.ok) throw new Error('예적금 스크린샷 분석에 실패했습니다.');
+    return res.json();
+  };
+
+  const bulkStockInput = async (
+    text: string
+  ): Promise<{
+    holdings: {
+      market: string;
+      ticker: string;
+      quantity: number;
+      avgPrice: number;
+      currency: 'KRW' | 'USD';
+      inputPrice?: number;
+    }[];
+  }> => {
+    const res = await fetch('/api/ai/bulk-stock-input', {
+      method: 'POST',
+      headers: headers(),
+      body: JSON.stringify({ text }),
+    });
+    if (!res.ok) throw new Error('자연어 분석에 실패했습니다.');
+    return res.json();
+  };
+
+  return { sendChat, smartInput, analyzeFinance, scanReceipt, scanAssets, scanStocks, scanSavings, bulkStockInput, textToSpeech };
 }

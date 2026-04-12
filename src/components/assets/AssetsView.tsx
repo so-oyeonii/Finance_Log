@@ -13,6 +13,8 @@ import { SavingsList } from './SavingsList';
 import { SavingsFormModal } from './SavingsFormModal';
 import { AssetScanButton } from './AssetScanButton';
 import { AssetScanResultModal } from './AssetScanResultModal';
+import { SavingsScanButton } from './SavingsScanButton';
+import { SavingsScanResultModal } from './SavingsScanResultModal';
 import type { Account, AccountType, Savings } from '@/types';
 import { cn } from '@/lib/utils';
 
@@ -27,6 +29,7 @@ export function AssetsView() {
   const [deleteTarget, setDeleteTarget] = useState<{ type: 'account' | 'savings'; item: Account | Savings } | null>(null);
   const [showSavingsForm, setShowSavingsForm] = useState(false);
   const [scanResult, setScanResult] = useState<{ bank: string; name: string; type: string; balance: number }[] | null>(null);
+  const [savingsScanResult, setSavingsScanResult] = useState<{ type: '예금' | '적금'; name: string; amount: number; rate: number; term: number; startDate: string }[] | null>(null);
 
   const isGraduate = mode === 'graduate';
 
@@ -91,8 +94,11 @@ export function AssetsView() {
       {/* Summary */}
       <AssetsSummary totalBalance={totalBalance} accountCount={accounts.length} mode={mode} />
 
-      {/* Asset Screenshot Scan */}
-      <AssetScanButton mode={mode} onResult={(accs) => setScanResult(accs)} />
+      {/* Screenshot Scans: accounts + savings */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <AssetScanButton mode={mode} onResult={(accs) => setScanResult(accs)} />
+        <SavingsScanButton mode={mode} onResult={(s) => setSavingsScanResult(s)} />
+      </div>
 
       {/* Accounts Section */}
       <div>
@@ -155,6 +161,21 @@ export function AssetsView() {
           mode={mode}
           onSubmit={handleSavingsSubmit}
           onClose={() => setShowSavingsForm(false)}
+        />
+      )}
+
+      {/* Savings Scan Result Modal */}
+      {savingsScanResult && (
+        <SavingsScanResultModal
+          scannedSavings={savingsScanResult}
+          mode={mode}
+          onSave={async (items) => {
+            for (const s of items) {
+              await addSavings(s);
+            }
+            setSavingsScanResult(null);
+          }}
+          onClose={() => setSavingsScanResult(null)}
         />
       )}
 
