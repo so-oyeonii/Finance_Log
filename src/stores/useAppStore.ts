@@ -52,6 +52,10 @@ interface AppState {
   supabaseAnonKey: string;
   setSupabaseConfig: (url: string, key: string) => void;
 
+  // Onboarding
+  onboardingSeen: boolean;
+  setOnboardingSeen: (seen: boolean) => void;
+
   // UI states
   isDataLoaded: boolean;
   setIsDataLoaded: (loaded: boolean) => void;
@@ -73,6 +77,7 @@ export const useAppStore = create<AppState>((set) => ({
   openaiApiKey: '',
   supabaseUrl: '',
   supabaseAnonKey: '',
+  onboardingSeen: false,
   isDataLoaded: false,
 
   setMode: async (mode) => {
@@ -108,19 +113,25 @@ export const useAppStore = create<AppState>((set) => ({
     await setSetting('supabaseAnonKey', key);
   },
 
+  setOnboardingSeen: async (seen) => {
+    set({ onboardingSeen: seen });
+    await setSetting('onboardingSeen', seen);
+  },
+
   setIsDataLoaded: (loaded) => set({ isDataLoaded: loaded }),
 
   initialize: async () => {
     const mode = await getSetting<AppMode>('appMode', 'graduate');
     const theme = await getSetting<ThemeMode>('theme', 'system');
     const layout = await getSetting<string[]>('dashboardLayout', [
-      'netWorth', 'dividendChart', 'incomeChart', 'expenseChart',
-      'portfolio', 'expenseTop3', 'investComp', 'aiReport',
+      'incomeInsight', 'spendLimit', 'netWorth', 'savingsMaturity', 'incomeChart', 'expenseChart',
+      'rebalancing', 'portfolio', 'dividendChart', 'expenseTop3', 'capitalGainsTax', 'investComp', 'aiReport',
     ]);
     const openaiApiKey = await getSetting<string>('openaiApiKey', '');
     const supabaseUrl = await getSetting<string>('supabaseUrl', '');
     const supabaseAnonKey = await getSetting<string>('supabaseAnonKey', '');
+    const onboardingSeen = await getSetting<boolean>('onboardingSeen', false);
     applyTheme(theme);
-    set({ mode, theme, dashboardLayout: layout, openaiApiKey, supabaseUrl, supabaseAnonKey, isDataLoaded: true });
+    set({ mode, theme, dashboardLayout: layout, openaiApiKey, supabaseUrl, supabaseAnonKey, onboardingSeen, isDataLoaded: true });
   },
 }));

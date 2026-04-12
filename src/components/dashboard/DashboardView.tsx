@@ -31,6 +31,11 @@ import { DividendChartWidget } from './widgets/DividendChartWidget';
 import { PortfolioWidget } from './widgets/PortfolioWidget';
 import { InvestCompWidget } from './widgets/InvestCompWidget';
 import { AiReportWidget } from './widgets/AiReportWidget';
+import { SavingsMaturityWidget } from './widgets/SavingsMaturityWidget';
+import { IncomeInsightWidget } from './widgets/IncomeInsightWidget';
+import { RebalancingWidget } from './widgets/RebalancingWidget';
+import { CapitalGainsTaxWidget } from './widgets/CapitalGainsTaxWidget';
+import { SpendLimitWidget } from './widgets/SpendLimitWidget';
 
 export function DashboardView() {
   const {
@@ -40,8 +45,8 @@ export function DashboardView() {
   } = useAppStore();
 
   const { totalBalance } = useAccounts();
-  const { monthlyStats, expenseByCategory } = useTransactions(selectedYear);
-  const { portfolio, portfolioByMarket, dividendStats } = useStocks(selectedYear);
+  const { monthlyStats, expenseByCategory, incomeInsights } = useTransactions(selectedYear);
+  const { stocks, portfolio, portfolioByMarket, dividendStats } = useStocks(selectedYear);
 
   const isGraduate = mode === 'graduate';
 
@@ -76,13 +81,14 @@ export function DashboardView() {
       <ExpenseTop3Widget data={expenseByCategory} mode={mode} />
     ),
     incomeChart: (
-      <IncomeChartWidget monthlyStats={monthlyStats} />
+      <IncomeChartWidget monthlyStats={monthlyStats} incomeInsights={incomeInsights} />
     ),
+    incomeInsight: <IncomeInsightWidget insights={incomeInsights} />,
     expenseChart: (
       <ExpenseChartWidget monthlyStats={monthlyStats} />
     ),
     dividendChart: (
-      <DividendChartWidget dividendStats={dividendStats} />
+      <DividendChartWidget dividendStats={dividendStats} selectedYear={selectedYear} allStocks={stocks} />
     ),
     portfolio: (
       <PortfolioWidget data={portfolioByMarket} />
@@ -91,6 +97,10 @@ export function DashboardView() {
       <InvestCompWidget holdings={portfolio.activeHoldings} />
     ),
     aiReport: <AiReportWidget />,
+    savingsMaturity: <SavingsMaturityWidget />,
+    rebalancing: <RebalancingWidget portfolio={portfolio} />,
+    capitalGainsTax: <CapitalGainsTaxWidget stocks={stocks} selectedYear={selectedYear} />,
+    spendLimit: <SpendLimitWidget monthlyStats={monthlyStats} insights={incomeInsights} />,
   };
 
   return (

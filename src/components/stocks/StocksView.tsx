@@ -12,8 +12,13 @@ import { StockTransactionList } from './StockTransactionList';
 import { PortfolioChart } from './PortfolioChart';
 import { DividendSection } from './DividendSection';
 import { PriceUpdateModal } from './PriceUpdateModal';
+import { StockScanButton } from './StockScanButton';
+import { StockBulkTextButton } from './StockBulkTextButton';
+import { StockCsvButton } from './StockCsvButton';
+import { StockScanResultModal } from './StockScanResultModal';
+import { PriceRefreshButton } from './PriceRefreshButton';
 import { DeleteConfirmModal } from '@/components/assets/DeleteConfirmModal';
-import type { Stock, Holding } from '@/types';
+import type { Stock, Holding, StockMarket, Currency } from '@/types';
 import { cn } from '@/lib/utils';
 
 type SubTab = 'portfolio' | 'transactions' | 'dividends';
@@ -37,6 +42,9 @@ export function StocksView() {
   const [showForm, setShowForm] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<Stock | null>(null);
   const [priceUpdateTarget, setPriceUpdateTarget] = useState<Holding | null>(null);
+  const [scanResult, setScanResult] = useState<
+    { market: string; ticker: string; quantity: number; avgPrice: number; currency: 'KRW' | 'USD'; inputPrice?: number }[] | null
+  >(null);
 
   const handleAddStock = async (data: Omit<Stock, 'id' | 'createdAt'>) => {
     await addStock(data);
@@ -55,6 +63,38 @@ export function StocksView() {
     setPriceUpdateTarget(null);
   };
 
+  // 스크린샷에서 추출된 보유 종목을 isInitial=true 로 일괄 저장한다.
+  // 기준일 스냅샷: 오늘 날짜의 "buy" 거래로 기록하되 isInitial 플래그로 구분.
+  const handleScanSave = async (
+    items: {
+      market: StockMarket;
+      ticker: string;
+      quantity: number;
+      avgPrice: number;
+      currency: Currency;
+      inputPrice?: number;
+      accountId: number;
+    }[]
+  ) => {
+    const today = new Date().toISOString().split('T')[0];
+    for (const it of items) {
+      await addStock({
+        date: today,
+        market: it.market,
+        ticker: it.ticker,
+        type: 'buy',
+        currency: it.currency,
+        price: it.avgPrice,
+        inputPrice: it.inputPrice,
+        quantity: it.quantity,
+        memo: '초기 보유 (스냅샷)',
+        accountId: it.accountId,
+        isInitial: true,
+      });
+    }
+    setScanResult(null);
+  };
+
   const tabs: { key: SubTab; label: string }[] = [
     { key: 'portfolio', label: '포트폴리오' },
     { key: 'transactions', label: '거래내역' },
@@ -65,6 +105,16 @@ export function StocksView() {
     <div className="space-y-6">
       {/* Portfolio Summary Hero */}
       <PortfolioSummary portfolio={portfolio} mode={mode} />
+
+      {/* Bulk initial holdings: screenshot / natural language / CSV */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+        <StockScanButton mode={mode} onResult={(h) => setScanResult(h)} />
+        <StockBulkTextButton mode={mode} onResult={(h) => setScanResult(h)} />
+        <StockCsvButton mode={mode} onResult={(h) => setScanResult(h)} />
+      </div>
+
+      {/* Current price auto-update */}
+      <PriceRefreshButton mode={mode} holdings={portfolio.activeHoldings} />
 
       {/* Sub Tab Toggle */}
       <div className="flex gap-1 bg-slate-100 dark:bg-slate-700 rounded-lg p-1">
@@ -155,6 +205,18 @@ export function StocksView() {
           holding={priceUpdateTarget}
           onConfirm={handlePriceUpdate}
           onCancel={() => setPriceUpdateTarget(null)}
+        />
+      )}
+
+      {/* Stock Scan Result Modal */}
+      {scanResult && (
+        <StockScanResultModal
+          scannedHoldings={scanResult}
+          accounts={accounts}
+          mode={mode}
+          defaultDate={new Date().toISOString().split('T')[0]}
+          onSave={handleScanSave}
+          onClose={() => setScanResult(null)}
         />
       )}
 
