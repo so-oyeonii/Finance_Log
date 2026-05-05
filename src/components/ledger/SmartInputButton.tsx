@@ -12,9 +12,18 @@ interface SmartInputButtonProps {
   mode: AppMode;
   onConfirm: (data: Omit<Transaction, 'id' | 'createdAt'>) => void;
   onEditInForm: (data: Partial<Transaction>) => void;
+  buttonClassName?: string;
+  label?: string;
 }
 
-export function SmartInputButton({ accounts, mode, onConfirm, onEditInForm }: SmartInputButtonProps) {
+export function SmartInputButton({
+  accounts,
+  mode,
+  onConfirm,
+  onEditInForm,
+  buttonClassName,
+  label = 'AI 입력',
+}: SmartInputButtonProps) {
   const { smartInput, scanReceipt } = useAi();
   const isGraduate = mode === 'graduate';
 
@@ -88,6 +97,10 @@ export function SmartInputButton({ accounts, mode, onConfirm, onEditInForm }: Sm
 
   const handleConfirm = () => {
     if (!result) return;
+    if (accounts.length === 0) {
+      setError('먼저 계좌를 하나 추가해주세요.');
+      return;
+    }
     onConfirm({
       date: result.date,
       type: result.type,
@@ -128,11 +141,12 @@ export function SmartInputButton({ accounts, mode, onConfirm, onEditInForm }: Sm
         onClick={() => setIsOpen(true)}
         className={cn(
           'flex items-center gap-1 text-xs px-3 py-1.5 rounded-lg text-white transition-colors',
-          isGraduate ? 'bg-violet-500 hover:bg-violet-600' : 'bg-teal-500 hover:bg-teal-600'
+          isGraduate ? 'bg-violet-500 hover:bg-violet-600' : 'bg-teal-500 hover:bg-teal-600',
+          buttonClassName
         )}
       >
         <Sparkles className="w-3.5 h-3.5" />
-        AI 입력
+        {label}
       </button>
 
       {isOpen && (

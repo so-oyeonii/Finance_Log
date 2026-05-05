@@ -12,6 +12,7 @@ import { LedgerView } from '@/components/ledger/LedgerView';
 import { StocksView } from '@/components/stocks/StocksView';
 import { DashboardView } from '@/components/dashboard/DashboardView';
 import { ChatView } from '@/components/chat/ChatView';
+import { GlobalQuickInput } from '@/components/ledger/GlobalQuickInput';
 import { processRecurringTransactions } from '@/lib/recurring';
 
 export default function HomePage() {
@@ -56,6 +57,7 @@ export default function HomePage() {
         {activeTab === 'chat' && <ChatView />}
       </main>
 
+      <GlobalQuickInput />
       <OnboardingModal />
     </div>
   );

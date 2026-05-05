@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Filter, ArrowRightLeft } from 'lucide-react';
+import { Filter, ArrowRightLeft, Plus, Wallet } from 'lucide-react';
 import { TransactionCard } from './TransactionCard';
 import type { Transaction, TransactionType, Account } from '@/types';
 import { cn } from '@/lib/utils';
@@ -11,11 +11,13 @@ interface TransactionListProps {
   accounts: Account[];
   onEdit: (transaction: Transaction) => void;
   onDelete: (transaction: Transaction) => void;
+  onAdd: () => void;
+  onAddAccount: () => void;
 }
 
 type FilterType = 'all' | TransactionType;
 
-export function TransactionList({ transactions, accounts, onEdit, onDelete }: TransactionListProps) {
+export function TransactionList({ transactions, accounts, onEdit, onDelete, onAdd, onAddAccount }: TransactionListProps) {
   const [filter, setFilter] = useState<FilterType>('all');
 
   const filtered = useMemo(() => {
@@ -84,8 +86,26 @@ export function TransactionList({ transactions, accounts, onEdit, onDelete }: Tr
       ) : (
         <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-8 text-center">
           <ArrowRightLeft className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto mb-2" />
-          <p className="text-sm text-slate-400 dark:text-slate-500">거래 내역이 없습니다</p>
-          <p className="text-xs text-slate-300 dark:text-slate-600 mt-1">위의 추가 버튼을 눌러 거래를 기록해보세요</p>
+          <p className="text-sm font-semibold text-slate-600 dark:text-slate-300">아직 거래 내역이 없습니다</p>
+          <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">계좌 하나와 첫 거래만 있으면 월별 흐름이 보이기 시작합니다</p>
+          <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:justify-center">
+            <button
+              type="button"
+              onClick={onAdd}
+              className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-slate-900 px-3 py-2 text-xs font-semibold text-white transition-colors hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              첫 거래 기록
+            </button>
+            <button
+              type="button"
+              onClick={onAddAccount}
+              className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-slate-100 px-3 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600"
+            >
+              <Wallet className="h-3.5 w-3.5" />
+              계좌 먼저 추가
+            </button>
+          </div>
         </div>
       )}
     </div>

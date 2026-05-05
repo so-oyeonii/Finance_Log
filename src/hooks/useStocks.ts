@@ -12,7 +12,7 @@ import type { Stock, StockPrice, DividendStat } from '@/types';
 export function useStocks(selectedYear: string) {
   const allStocks = useLiveQuery(() => db.stocks.toArray()) ?? [];
   const allPrices = useLiveQuery(() => db.stockPrices.toArray()) ?? [];
-  const { accounts, updateBalance } = useAccounts();
+  const { accounts } = useAccounts();
 
   // Convert prices array to Record
   const currentPrices = useMemo(() => {
@@ -79,37 +79,56 @@ export function useStocks(selectedYear: string) {
 
   // --- CRUD ---
 
-  const addStock = async (data: Omit<Stock, 'id' | 'createdAt'>) => {
-    const id = await db.stocks.add({
-      ...data,
-      createdAt: new Date().toISOString(),
+  const getCashDelta = (data: Pick<Stock, 'type' | 'price' | 'quantity' | 'isInitial'>) => {
+    if (data.isInitial) return 0;
+
+    const amount = data.price * (data.type === 'dividend' ? 1 : data.quantity);
+    if (data.type === 'buy') return -amount;
+    if (data.type === 'sell' || data.type === 'dividend') return amount;
+    return 0;
+  };
+
+  const applyAccountDelta = async (accountId: number, delta: number) => {
+    if (delta === 0) return;
+
+    const account = await db.accounts.get(accountId);
+    if (!account) return;
+
+    await db.accounts.update(accountId, {
+      balance: account.balance + delta,
+      updatedAt: new Date().toISOString(),
     });
+  };
 
-    // Update current price on buy
-    if (data.type === 'buy') {
-      const key = `${data.market}_${data.ticker}`;
-      await db.stockPrices.put({
-        key,
-        price: data.price,
-        updatedAt: new Date().toISOString(),
+  const addStock = async (data: Omit<Stock, 'id' | 'createdAt'>) => {
+    return db.transaction('rw', [db.stocks, db.stockPrices, db.accounts], async () => {
+      const id = await db.stocks.add({
+        ...data,
+        createdAt: new Date().toISOString(),
       });
-    }
 
-    // Update account balance (unless initial holding)
-    if (!data.isInitial) {
-      const amount = data.price * (data.type === 'dividend' ? 1 : data.quantity);
       if (data.type === 'buy') {
-        await updateBalance(data.accountId, -amount);
-      } else if (data.type === 'sell' || data.type === 'dividend') {
-        await updateBalance(data.accountId, amount);
+        const key = `${data.market}_${data.ticker}`;
+        await db.stockPrices.put({
+          key,
+          price: data.price,
+          updatedAt: new Date().toISOString(),
+        });
       }
-    }
 
-    return id;
+      await applyAccountDelta(data.accountId, getCashDelta(data));
+      return id;
+    });
   };
 
   const deleteStock = async (id: number) => {
-    await db.stocks.delete(id);
+    await db.transaction('rw', [db.stocks, db.accounts], async () => {
+      const target = await db.stocks.get(id);
+      if (!target) return;
+
+      await applyAccountDelta(target.accountId, -getCashDelta(target));
+      await db.stocks.delete(id);
+    });
   };
 
   const updatePrice = async (key: string, price: number) => {

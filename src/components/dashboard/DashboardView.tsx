@@ -12,7 +12,7 @@ import {
 } from '@dnd-kit/core';
 import {
   SortableContext,
-  verticalListSortingStrategy,
+  rectSortingStrategy,
   arrayMove,
 } from '@dnd-kit/sortable';
 
@@ -139,10 +139,15 @@ export function DashboardView() {
         collisionDetection={closestCenter}
         onDragEnd={handleDragEnd}
       >
-        <SortableContext items={dashboardLayout} strategy={verticalListSortingStrategy}>
-          <div className="space-y-4">
+        <SortableContext items={dashboardLayout} strategy={rectSortingStrategy}>
+          <div className="grid gap-4 md:grid-cols-2">
             {dashboardLayout.map((widgetId) => (
-              <WidgetWrapper key={widgetId} id={widgetId} isEditing={isEditingLayout}>
+              <WidgetWrapper
+                key={widgetId}
+                id={widgetId}
+                isEditing={isEditingLayout}
+                className={widgetId === 'netWorth' ? 'md:col-span-2' : undefined}
+              >
                 {widgetMap[widgetId]}
               </WidgetWrapper>
             ))}

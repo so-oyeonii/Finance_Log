@@ -3,12 +3,15 @@ import type { AppMode } from '@/types';
 import { getSetting, setSetting } from '@/lib/db';
 import { getCurrentYear } from '@/lib/format';
 import { clearSupabaseClient } from '@/lib/supabase';
+import { MODES } from '@/config/modes';
 
 // ============================================
 // Global App State
 // ============================================
 
 export type ThemeMode = 'light' | 'dark' | 'system';
+
+const defaultDashboardLayout = MODES.graduate.defaultDashboardOrder;
 
 function applyTheme(theme: ThemeMode) {
   if (typeof window === 'undefined') return;
@@ -68,11 +71,8 @@ export const useAppStore = create<AppState>((set) => ({
   mode: 'graduate',
   theme: 'system',
   selectedYear: getCurrentYear(),
-  activeTab: 'dashboard',
-  dashboardLayout: [
-    'netWorth', 'dividendChart', 'incomeChart', 'expenseChart',
-    'portfolio', 'expenseTop3', 'investComp', 'aiReport',
-  ],
+  activeTab: 'ledger',
+  dashboardLayout: defaultDashboardLayout,
   isEditingLayout: false,
   openaiApiKey: '',
   supabaseUrl: '',
@@ -81,8 +81,10 @@ export const useAppStore = create<AppState>((set) => ({
   isDataLoaded: false,
 
   setMode: async (mode) => {
-    set({ mode });
+    const dashboardLayout = MODES[mode].defaultDashboardOrder;
+    set({ mode, dashboardLayout });
     await setSetting('appMode', mode);
+    await setSetting('dashboardLayout', dashboardLayout);
   },
 
   setTheme: async (theme) => {
@@ -92,7 +94,10 @@ export const useAppStore = create<AppState>((set) => ({
   },
 
   setSelectedYear: (year) => set({ selectedYear: year }),
-  setActiveTab: (tab) => set({ activeTab: tab }),
+  setActiveTab: async (tab) => {
+    set({ activeTab: tab });
+    await setSetting('activeTab', tab);
+  },
 
   setDashboardLayout: async (layout) => {
     set({ dashboardLayout: layout });
@@ -123,15 +128,13 @@ export const useAppStore = create<AppState>((set) => ({
   initialize: async () => {
     const mode = await getSetting<AppMode>('appMode', 'graduate');
     const theme = await getSetting<ThemeMode>('theme', 'system');
-    const layout = await getSetting<string[]>('dashboardLayout', [
-      'incomeInsight', 'spendLimit', 'netWorth', 'savingsMaturity', 'incomeChart', 'expenseChart',
-      'rebalancing', 'portfolio', 'dividendChart', 'expenseTop3', 'capitalGainsTax', 'investComp', 'aiReport',
-    ]);
+    const layout = await getSetting<string[]>('dashboardLayout', MODES[mode].defaultDashboardOrder);
     const openaiApiKey = await getSetting<string>('openaiApiKey', '');
     const supabaseUrl = await getSetting<string>('supabaseUrl', '');
     const supabaseAnonKey = await getSetting<string>('supabaseAnonKey', '');
     const onboardingSeen = await getSetting<boolean>('onboardingSeen', false);
+    const activeTab = await getSetting<string>('activeTab', onboardingSeen ? 'ledger' : 'ledger');
     applyTheme(theme);
-    set({ mode, theme, dashboardLayout: layout, openaiApiKey, supabaseUrl, supabaseAnonKey, onboardingSeen, isDataLoaded: true });
+    set({ mode, theme, activeTab, dashboardLayout: layout, openaiApiKey, supabaseUrl, supabaseAnonKey, onboardingSeen, isDataLoaded: true });
   },
 }));

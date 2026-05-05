@@ -9,9 +9,10 @@ interface WidgetWrapperProps {
   id: string;
   isEditing: boolean;
   children: React.ReactNode;
+  className?: string;
 }
 
-export function WidgetWrapper({ id, isEditing, children }: WidgetWrapperProps) {
+export function WidgetWrapper({ id, isEditing, children, className }: WidgetWrapperProps) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
 
   const style = {
@@ -26,7 +27,8 @@ export function WidgetWrapper({ id, isEditing, children }: WidgetWrapperProps) {
       className={cn(
         'relative',
         isDragging && 'z-10 opacity-80',
-        isEditing && 'animate-wiggle'
+        isEditing && 'animate-wiggle',
+        className
       )}
     >
       {isEditing && (

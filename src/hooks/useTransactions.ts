@@ -1,10 +1,9 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useMemo } from 'react';
 import { db } from '@/lib/db';
-import { useAccounts } from './useAccounts';
 import { useAppStore } from '@/stores/useAppStore';
 import { computeIncomeInsights } from '@/lib/incomeStats';
-import type { Transaction, TransactionType, MonthlyStat } from '@/types';
+import type { Transaction, MonthlyStat } from '@/types';
 
 // ============================================
 // useTransactions Hook
@@ -12,7 +11,6 @@ import type { Transaction, TransactionType, MonthlyStat } from '@/types';
 
 export function useTransactions(selectedYear: string) {
   const allTransactions = useLiveQuery(() => db.transactions.toArray()) ?? [];
-  const { updateBalance } = useAccounts();
 
   // Year-filtered transactions
   const yearlyTransactions = useMemo(
@@ -99,64 +97,66 @@ export function useTransactions(selectedYear: string) {
 
   // --- CRUD ---
 
-  const addTransaction = async (data: Omit<Transaction, 'id' | 'createdAt'>) => {
-    const id = await db.transactions.add({
-      ...data,
-      createdAt: new Date().toISOString(),
-    });
+  const applyBalanceChange = async (
+    data: Pick<Transaction, 'type' | 'accountId' | 'toAccountId' | 'amount'>,
+    direction: 1 | -1
+  ) => {
+    const applyAccountDelta = async (accountId: number, delta: number) => {
+      const account = await db.accounts.get(accountId);
+      if (!account) return;
 
-    // Update account balances
+      const updates = {
+        balance: account.balance + delta,
+        updatedAt: new Date().toISOString(),
+        ...((account.type === 'IRP/연금' || account.type === '주식예수금')
+          ? { principal: (account.principal ?? account.balance) + delta }
+          : {}),
+      };
+
+      await db.accounts.update(accountId, updates);
+    };
+
     if (data.type === 'income') {
-      await updateBalance(data.accountId, data.amount, true);
+      await applyAccountDelta(data.accountId, data.amount * direction);
     } else if (data.type === 'expense') {
-      await updateBalance(data.accountId, -data.amount, true);
+      await applyAccountDelta(data.accountId, -data.amount * direction);
     } else if (data.type === 'transfer' && data.toAccountId) {
-      await updateBalance(data.accountId, -data.amount, true);
-      await updateBalance(data.toAccountId, data.amount, true);
+      await applyAccountDelta(data.accountId, -data.amount * direction);
+      await applyAccountDelta(data.toAccountId, data.amount * direction);
     }
+  };
 
-    return id;
+  const addTransaction = async (data: Omit<Transaction, 'id' | 'createdAt'>) => {
+    return db.transaction('rw', [db.transactions, db.accounts], async () => {
+      const id = await db.transactions.add({
+        ...data,
+        createdAt: new Date().toISOString(),
+      });
+
+      await applyBalanceChange(data, 1);
+      return id;
+    });
   };
 
   const deleteTransaction = async (id: number) => {
-    const target = await db.transactions.get(id);
-    if (!target) return;
+    await db.transaction('rw', [db.transactions, db.accounts], async () => {
+      const target = await db.transactions.get(id);
+      if (!target) return;
 
-    // Reverse account balance changes
-    if (target.type === 'income') {
-      await updateBalance(target.accountId, -target.amount, true);
-    } else if (target.type === 'expense') {
-      await updateBalance(target.accountId, target.amount, true);
-    } else if (target.type === 'transfer' && target.toAccountId) {
-      await updateBalance(target.accountId, target.amount, true);
-      await updateBalance(target.toAccountId, -target.amount, true);
-    }
-
-    await db.transactions.delete(id);
+      await applyBalanceChange(target, -1);
+      await db.transactions.delete(id);
+    });
   };
 
   const updateTransaction = async (id: number, newData: Omit<Transaction, 'id' | 'createdAt'>) => {
-    const old = await db.transactions.get(id);
-    if (!old) return;
+    await db.transaction('rw', [db.transactions, db.accounts], async () => {
+      const old = await db.transactions.get(id);
+      if (!old) return;
 
-    // Reverse old balance changes
-    if (old.type === 'income') await updateBalance(old.accountId, -old.amount, true);
-    else if (old.type === 'expense') await updateBalance(old.accountId, old.amount, true);
-    else if (old.type === 'transfer' && old.toAccountId) {
-      await updateBalance(old.accountId, old.amount, true);
-      await updateBalance(old.toAccountId, -old.amount, true);
-    }
-
-    // Apply new data
-    await db.transactions.update(id, newData);
-
-    // Apply new balance changes
-    if (newData.type === 'income') await updateBalance(newData.accountId, newData.amount, true);
-    else if (newData.type === 'expense') await updateBalance(newData.accountId, -newData.amount, true);
-    else if (newData.type === 'transfer' && newData.toAccountId) {
-      await updateBalance(newData.accountId, -newData.amount, true);
-      await updateBalance(newData.toAccountId, newData.amount, true);
-    }
+      await applyBalanceChange(old, -1);
+      await db.transactions.update(id, newData);
+      await applyBalanceChange(newData, 1);
+    });
   };
 
   return {

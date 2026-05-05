@@ -1,22 +1,20 @@
 'use client';
 
-import { Camera, MessageSquarePlus, Pencil, Sparkles, X } from 'lucide-react';
+import { ArrowRight, Building2, GraduationCap, Briefcase, Plus, Sparkles, X } from 'lucide-react';
 import { useAppStore } from '@/stores/useAppStore';
 import { cn } from '@/lib/utils';
+import type { AppMode } from '@/types';
 
-// 첫 실행 시 한 번만 보여주는 온보딩 마법사.
-// "기존 보유 자산이 있나요?"에 답하며 가장 편한 등록 방법으로 유도.
 export function OnboardingModal() {
-  const { mode, onboardingSeen, setOnboardingSeen, setActiveTab } = useAppStore();
+  const { mode, setMode, onboardingSeen, setOnboardingSeen, setActiveTab } = useAppStore();
   const isGraduate = mode === 'graduate';
 
   if (onboardingSeen) return null;
 
   const finish = () => setOnboardingSeen(true);
 
-  const goToStocks = () => {
-    setActiveTab('stocks');
-    finish();
+  const chooseMode = async (nextMode: AppMode) => {
+    await setMode(nextMode);
   };
 
   const goToAssets = () => {
@@ -24,69 +22,128 @@ export function OnboardingModal() {
     finish();
   };
 
+  const goToLedger = () => {
+    setActiveTab('ledger');
+    finish();
+  };
+
   return (
-    <div className="fixed inset-0 bg-black/60 z-[60] flex items-end md:items-center justify-center animate-fade-in">
-      <div className="bg-white dark:bg-slate-800 w-full md:w-[34rem] rounded-t-2xl md:rounded-2xl p-6 max-h-[92vh] overflow-y-auto animate-slide-up">
-        {/* Header */}
-        <div className="flex items-start justify-between mb-2">
+    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-black/60 animate-fade-in md:items-center">
+      <div className="max-h-[92vh] w-full overflow-y-auto rounded-t-2xl bg-white p-6 animate-slide-up dark:bg-slate-800 md:w-[34rem] md:rounded-2xl">
+        <div className="mb-5 flex items-start justify-between">
           <div>
-            <div className="flex items-center gap-2 mb-1">
-              <Sparkles className={cn('w-5 h-5', isGraduate ? 'text-indigo-500' : 'text-emerald-500')} />
-              <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100">
-                처음 오셨네요!
-              </h3>
+            <div className="mb-1 flex items-center gap-2">
+              <Sparkles className={cn('h-5 w-5', isGraduate ? 'text-indigo-500' : 'text-emerald-500')} />
+              <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">오늘부터 기록을 시작해볼게요</h3>
             </div>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
-              이미 가지고 계신 자산이 있나요? 가장 편한 방법을 골라보세요.
+            <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+              계좌 하나와 첫 거래만 있으면 대시보드가 채워집니다. 투자와 AI 기능은 나중에 붙여도 됩니다.
             </p>
           </div>
           <button
             onClick={finish}
-            className="p-1 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full"
+            className="rounded-full p-1 hover:bg-slate-100 dark:hover:bg-slate-700"
             aria-label="닫기"
           >
-            <X className="w-5 h-5 text-slate-400" />
+            <X className="h-5 w-5 text-slate-400" />
           </button>
         </div>
 
-        {/* 3 method cards */}
-        <div className="space-y-3 mt-5">
-          <MethodCard
-            icon={<Camera className="w-5 h-5" />}
-            title="증권사 앱 스크린샷"
-            desc="보유 종목 화면을 찍어서 업로드하면 AI가 종목·수량·평단을 한 번에 추출해요. 가장 빠른 방법이에요."
-            badge="추천"
-            isGraduate={isGraduate}
-            onClick={goToStocks}
-          />
-          <MethodCard
-            icon={<MessageSquarePlus className="w-5 h-5" />}
-            title="자연어로 한번에 입력"
-            desc={'"삼성전자 100주 7만원, 애플 20주 150달러" 처럼 여러 줄로 적으면 자동 파싱해요.'}
-            isGraduate={isGraduate}
-            onClick={goToStocks}
-          />
-          <MethodCard
-            icon={<Pencil className="w-5 h-5" />}
-            title="직접 하나씩 입력"
-            desc="계좌·예적금·주식을 천천히 수기로 등록할게요. 기본 방식이에요."
-            isGraduate={isGraduate}
-            onClick={goToAssets}
-          />
+        <div className="space-y-4">
+          <section>
+            <p className="mb-2 text-xs font-semibold text-slate-500 dark:text-slate-400">1. 내 상황 선택</p>
+            <div className="grid grid-cols-2 gap-2">
+              <ModeButton
+                active={mode === 'graduate'}
+                icon={<GraduationCap className="h-4 w-4" />}
+                label="대학원생"
+                description="불규칙 수입 중심"
+                tone="indigo"
+                onClick={() => chooseMode('graduate')}
+              />
+              <ModeButton
+                active={mode === 'worker'}
+                icon={<Briefcase className="h-4 w-4" />}
+                label="회사원"
+                description="월급/투자 중심"
+                tone="emerald"
+                onClick={() => chooseMode('worker')}
+              />
+            </div>
+          </section>
+
+          <section>
+            <p className="mb-2 text-xs font-semibold text-slate-500 dark:text-slate-400">2. 시작 방법</p>
+            <div className="space-y-2">
+              <StartCard
+                icon={<Building2 className="h-5 w-5" />}
+                title="계좌 하나 먼저 추가"
+                desc="입출금 계좌와 현재 잔액을 넣으면 거래 기록 때 잔액이 자동으로 맞춰집니다."
+                badge="추천"
+                isGraduate={isGraduate}
+                onClick={goToAssets}
+              />
+              <StartCard
+                icon={<Plus className="h-5 w-5" />}
+                title="바로 첫 거래 기록"
+                desc="이미 계좌를 만들었다면 장부로 이동해서 오늘 지출부터 기록합니다."
+                isGraduate={isGraduate}
+                onClick={goToLedger}
+              />
+            </div>
+          </section>
         </div>
 
         <button
           onClick={finish}
-          className="w-full mt-5 py-2.5 text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
+          className="mt-5 w-full py-2.5 text-sm text-slate-500 transition-colors hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
         >
-          아직 등록할 자산이 없어요 — 나중에 할래요
+          둘러보고 나중에 시작하기
         </button>
       </div>
     </div>
   );
 }
 
-function MethodCard({
+function ModeButton({
+  active,
+  icon,
+  label,
+  description,
+  tone,
+  onClick,
+}: {
+  active: boolean;
+  icon: React.ReactNode;
+  label: string;
+  description: string;
+  tone: 'indigo' | 'emerald';
+  onClick: () => void;
+}) {
+  const activeClass = tone === 'indigo'
+    ? 'border-indigo-500 bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-200'
+    : 'border-emerald-500 bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-200';
+
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        'rounded-lg border p-3 text-left transition-colors',
+        active
+          ? activeClass
+          : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700'
+      )}
+    >
+      <div className="mb-1 flex items-center gap-1.5 text-sm font-bold">
+        {icon}
+        {label}
+      </div>
+      <p className="text-xs opacity-75">{description}</p>
+    </button>
+  );
+}
+
+function StartCard({
   icon,
   title,
   desc,
@@ -105,41 +162,30 @@ function MethodCard({
     <button
       onClick={onClick}
       className={cn(
-        'w-full text-left flex items-start gap-3 p-4 rounded-xl border transition-colors',
-        'border-slate-200 dark:border-slate-600 hover:border-transparent',
+        'flex w-full items-start gap-3 rounded-lg border border-slate-200 p-4 text-left transition-colors dark:border-slate-600',
         isGraduate
-          ? 'hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:ring-2 hover:ring-indigo-300'
-          : 'hover:bg-emerald-50 dark:hover:bg-emerald-900/20 hover:ring-2 hover:ring-emerald-300'
+          ? 'hover:border-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20'
+          : 'hover:border-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/20'
       )}
     >
       <div
         className={cn(
-          'flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center',
+          'flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg',
           isGraduate
-            ? 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300'
-            : 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-300'
+            ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/40 dark:text-indigo-300'
+            : 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-300'
         )}
       >
         {icon}
       </div>
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-0.5">
+      <div className="min-w-0 flex-1">
+        <div className="mb-0.5 flex items-center gap-2">
           <span className="text-sm font-bold text-slate-800 dark:text-slate-100">{title}</span>
-          {badge && (
-            <span
-              className={cn(
-                'text-[10px] font-medium px-1.5 py-0.5 rounded-full',
-                isGraduate
-                  ? 'bg-indigo-600 text-white'
-                  : 'bg-emerald-600 text-white'
-              )}
-            >
-              {badge}
-            </span>
-          )}
+          {badge && <span className="rounded-full bg-slate-900 px-1.5 py-0.5 text-[10px] font-medium text-white dark:bg-white dark:text-slate-900">{badge}</span>}
         </div>
-        <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{desc}</p>
+        <p className="text-xs leading-relaxed text-slate-500 dark:text-slate-400">{desc}</p>
       </div>
+      <ArrowRight className="mt-2 h-4 w-4 flex-shrink-0 text-slate-300" />
     </button>
   );
 }

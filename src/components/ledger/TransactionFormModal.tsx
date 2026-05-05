@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { X } from 'lucide-react';
+import { Wallet, X } from 'lucide-react';
 import { getIncomeCategories, getExpenseCategories } from '@/config/modes';
 import { getToday } from '@/lib/format';
 import type { Transaction, Account, AppMode } from '@/types';
@@ -136,6 +136,15 @@ export function TransactionFormModal({
           </button>
         </div>
 
+        {accounts.length === 0 ? (
+          <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-center dark:border-amber-900/60 dark:bg-amber-900/20">
+            <Wallet className="mx-auto mb-2 h-8 w-8 text-amber-600 dark:text-amber-300" />
+            <p className="text-sm font-bold text-amber-900 dark:text-amber-100">계좌를 먼저 추가해주세요</p>
+            <p className="mt-1 text-xs leading-relaxed text-amber-800 dark:text-amber-200">
+              거래는 계좌 잔액과 연결됩니다. 입출금 계좌 하나를 만든 뒤 바로 지출을 기록할 수 있습니다.
+            </p>
+          </div>
+        ) : (
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
           {/* Type Toggle */}
           <div>
@@ -295,6 +304,7 @@ export function TransactionFormModal({
             {isEditing ? '수정 완료' : '추가하기'}
           </button>
         </form>
+        )}
       </div>
     </div>
   );

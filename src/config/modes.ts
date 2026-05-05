@@ -35,9 +35,9 @@ export const MODES: Record<AppMode, ModeConfig> = {
 한국어로 답변합니다.`,
     greeting: '안녕하세요! 🎓 대학원생 재무 멘토입니다. 연구비 관리부터 소액 투자까지, 무엇이든 물어보세요!',
     defaultDashboardOrder: [
-      'incomeInsight', 'spendLimit', 'netWorth', 'savingsMaturity',
-      'incomeChart', 'expenseChart', 'rebalancing', 'portfolio',
-      'dividendChart', 'expenseTop3', 'capitalGainsTax', 'investComp', 'aiReport',
+      'netWorth', 'spendLimit', 'expenseTop3', 'incomeInsight',
+      'expenseChart', 'incomeChart', 'savingsMaturity', 'portfolio',
+      'rebalancing', 'dividendChart', 'capitalGainsTax', 'investComp', 'aiReport',
     ],
   },
 
@@ -59,9 +59,9 @@ export const MODES: Record<AppMode, ModeConfig> = {
 친근하지만 프로페셔널한 톤으로 한국어 답변합니다.`,
     greeting: '안녕하세요! 💼 직장인 재무 멘토입니다. 월급 관리부터 투자 전략까지 도와드릴게요!',
     defaultDashboardOrder: [
-      'incomeInsight', 'spendLimit', 'netWorth', 'incomeChart', 'expenseChart',
-      'rebalancing', 'savingsMaturity', 'portfolio', 'expenseTop3',
-      'dividendChart', 'capitalGainsTax', 'investComp', 'aiReport',
+      'netWorth', 'spendLimit', 'expenseTop3', 'expenseChart',
+      'incomeChart', 'incomeInsight', 'portfolio', 'rebalancing',
+      'savingsMaturity', 'dividendChart', 'capitalGainsTax', 'investComp', 'aiReport',
     ],
   },
 };
